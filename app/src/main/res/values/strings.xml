@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Heart of Taiwanese</string>
+    <string name="english">English</string>
+    <string name="chinese">Chinese</string>
+    <string name="submit">Submit</string>
+    <string name="taiwanese_result">Taiwanese result:</string>
+    <string name="error">Error</string>
+</resources>
