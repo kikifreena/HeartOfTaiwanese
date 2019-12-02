@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DownloadFilesTask().execute(
+                new ParseWordTask().execute(
                         ((EditText) findViewById(R.id.editText))
                         .getText().toString()
                 );
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private class DownloadFilesTask extends AsyncTask<String, Integer, Boolean> {
+    private class ParseWordTask extends AsyncTask<String, Integer, Boolean> {
         /**
          * Override this method to perform a computation on a background thread. The
          * specified parameters are the parameters passed to {@link #execute}
@@ -52,6 +52,11 @@ public class MainActivity extends AppCompatActivity {
         private Word w;
 
         @Override
+        protected void onPreExecute(){
+            findViewById(R.id.twresult).setVisibility(View.GONE);
+            findViewById(R.id.result).setVisibility((View.GONE));
+        }
+        @Override
         protected Boolean doInBackground(String... s) {
             w = new Word(s[0]);
             return w.run();
@@ -61,8 +66,11 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean status) {
             if (status){
                 Log.d("MainActivity-Taiwanese", w.toString());
+                TextView textView = findViewById(R.id.twresult);
+                textView.setVisibility(View.VISIBLE);
                 TextView t = findViewById(R.id.result);
-                t.setText(w.toString());
+                t.setVisibility(View.VISIBLE);
+                t.setText(w.getTaiwanese());
             }
             else {
                 String error = MainActivity.this.getText(R.string.error).toString();

@@ -29,7 +29,7 @@
             android:ems="10"
             android:hint="@string/english"
             android:inputType="textPersonName"
-            android:text="@string/english" />
+            android:text="hippo" />
 
         <Button
             android:id="@+id/submit"
@@ -43,7 +43,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/taiwanese_result"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/result"
