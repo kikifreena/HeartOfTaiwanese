@@ -12,24 +12,24 @@
 
         <EditText
             android:id="@+id/editText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:contentDescription="@string/chinese"
             android:ems="10"
             android:hint="@string/chinese"
-            android:inputType="textPersonName"
+            android:inputType="text"
             android:text="河馬" />
 
         <EditText
             android:id="@+id/editTextEng"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/english"
-            android:inputType="textPersonName"
-            android:text="hippo" />
+            android:inputType="text"
+            android:text="@string/sampleEnglishText" />
 
         <Button
             android:id="@+id/submit"
@@ -37,6 +37,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/submit" />
+
+        <Button
+            android:id="@+id/clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/clear" />
 
         <TextView
             android:id="@+id/twresult"
