@@ -15,11 +15,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:contentDescription="@string/chinese"
             android:ems="10"
             android:hint="@string/chinese"
             android:inputType="text"
-            android:text="河馬" />
+            android:text="河馬"
+            android:importantForAutofill="no" />
+
+        <Button
+            android:id="@+id/submit_en"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/search_eng" />
 
         <EditText
             android:id="@+id/editTextEng"
@@ -29,14 +36,15 @@
             android:ems="10"
             android:hint="@string/english"
             android:inputType="text"
-            android:text="@string/sampleEnglishText" />
+            android:text="@string/sampleEnglishText"
+            android:importantForAutofill="no" />
 
         <Button
-            android:id="@+id/submit"
+            android:id="@+id/submit_ch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/submit" />
+            android:text="@string/search_ch" />
 
         <Button
             android:id="@+id/clear"
@@ -46,7 +54,7 @@
             android:text="@string/clear" />
 
         <TextView
-            android:id="@+id/twresult"
+            android:id="@+id/tw_result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/taiwanese_result"

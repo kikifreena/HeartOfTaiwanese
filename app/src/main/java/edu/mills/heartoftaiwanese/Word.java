@@ -5,24 +5,31 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Objects;
 
 class Word {
+    static final int LANGUAGE_ENGLISH = 1;
+    static final int LANGUAGE_CHINESE = 0;
     private static final String URL_TO_CRAWL = "http://210.240.194.97/q/THq.asp";
+    private static final String INVALID_MESSAGE = "Not found";
     private String chinese;
     private String taiwanese = "";
-    private String output = "";
-    private static final String INVALID_MESSAGE = "Not found";
 
-    Word(String chinese) {
-        this.chinese = chinese;
+    Word(String input, int languageCode) {
+        if (languageCode == LANGUAGE_ENGLISH) {
+            this.chinese = englishToChinese(input);
+        } else if (languageCode == LANGUAGE_CHINESE) {
+            this.chinese = input;
+        }
+    }
+
+    private String englishToChinese(String input) {
+        return input;
     }
 
     Boolean run() {
         try {
             this.crawlSite();
-            if (Objects.equals(taiwanese, INVALID_MESSAGE)) return false;
-            else return true;
+            return !taiwanese.equals(INVALID_MESSAGE);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -37,32 +44,25 @@ class Word {
         return taiwanese;
     }
 
-//    @Override
-//    public String toString() {
-//        return taiwanese;
-//    }
-
-    private String parse(String data){
+    private String parse(String data) {
         try {
             int loc = data.indexOf("台語羅馬字");
             int loc2 = 1 + data.indexOf(">", data.indexOf("<span", loc));
             int loc3 = data.indexOf("</span>", loc2);
             return convertToString(data.substring(loc2, loc3));
-        } catch (StringIndexOutOfBoundsException e){
+        } catch (StringIndexOutOfBoundsException e) {
             return INVALID_MESSAGE;
         }
     }
 
-    private String convertToString(String hex){
+    private String convertToString(String hex) {
         String[] split = hex.split("&#|;");
         StringBuilder sb = new StringBuilder();
         System.out.println(hex);
-        for (int i = 0; i < split.length; i++) {
-            String curr = split[i];
-            if (curr.matches("\\d+")){
-                sb.append((char) Integer.parseInt(split[i]));
-            }
-            else {
+        for (String curr : split) {
+            if (curr.matches("\\d+")) {
+                sb.append((char) Integer.parseInt(curr));
+            } else {
                 sb.append(curr);
             }
         }
@@ -78,14 +78,13 @@ class Word {
         if (response == HttpURLConnection.HTTP_OK) {
             BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String input;
-            StringBuffer resp = new StringBuffer();
+            StringBuilder resp = new StringBuilder();
 
             while ((input = br.readLine()) != null) {
                 resp.append(input);
             }
             br.close();
-            output = resp.toString();
-            taiwanese = this.parse(output);
+            taiwanese = this.parse(resp.toString());
         }
     }
 }
