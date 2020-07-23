@@ -78,6 +78,5 @@ internal class Word(input: String?) {
     companion object {
         private const val URL_TO_CRAWL_TW = "http://210.240.194.97/q/THq.asp?w="
         private const val INVALID_MESSAGE = "Not found"
-
     }
 }

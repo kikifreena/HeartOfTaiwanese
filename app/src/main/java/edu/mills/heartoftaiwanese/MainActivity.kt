@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
-
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -22,29 +20,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val chineseEditText = findViewById<EditText>(R.id.editText)
-        println(chineseEditText.text)
-        val englishEditText = findViewById<EditText>(R.id.editTextEng)
-        val b = findViewById<Button>(R.id.submit_ch)
-        b.setOnClickListener {
-            findViewById<View>(R.id.tw_result).visibility = View.GONE
-            findViewById<View>(R.id.result).visibility = View.GONE
-            ParseWordTask().execute(LanguageContainer(chineseEditText
+        submit_ch.setOnClickListener {
+            tw_result.visibility = View.GONE
+            result.visibility = View.GONE
+            ParseWordTask().execute(LanguageContainer(editText
                     .text.toString(), LANGUAGE_CHINESE)
             )
         }
-        val b2 = findViewById<Button>(R.id.submit_en)
-        b2.setOnClickListener {
+        submit_en.setOnClickListener {
             findViewById<View>(R.id.tw_result).visibility = View.GONE
             findViewById<View>(R.id.result).visibility = View.GONE
-            ParseWordTask().execute(LanguageContainer(englishEditText
+            ParseWordTask().execute(LanguageContainer(editTextEng
                     .text.toString(), LANGUAGE_ENGLISH)
             )
         }
         val clearButton = findViewById<Button>(R.id.clear)
         clearButton.setOnClickListener {
-            chineseEditText.setText("")
-            englishEditText.setText("")
+            editText.setText("")
+            editTextEng.setText("")
             findViewById<View>(R.id.tw_result).visibility = View.GONE
             findViewById<View>(R.id.result).visibility = View.GONE
         }
@@ -72,7 +65,6 @@ class MainActivity : AppCompatActivity() {
         override fun doInBackground(vararg lang: LanguageContainer): Boolean? {
             if (lang[0].language == LANGUAGE_ENGLISH){
                 val result = fetchChinese(lang[0].text)
-                println(result)
                 w = Word(result)
             }
             else {
@@ -84,10 +76,9 @@ class MainActivity : AppCompatActivity() {
         override fun onPostExecute(status: Boolean) {
             if (status) {
                 Log.d("MainActivity-Taiwanese", w.toString())
-                findViewById<View>(R.id.tw_result).visibility = View.VISIBLE
-                val t = findViewById<TextView>(R.id.result)
-                t.visibility = View.VISIBLE
-                t.text = w!!.taiwanese
+                tw_result.visibility = View.VISIBLE
+                result.visibility = View.VISIBLE
+                result.text = w!!.taiwanese
             } else {
                 val error = this@MainActivity.getText(R.string.error).toString()
                 Toast.makeText(this@MainActivity, error, Toast.LENGTH_LONG).show()
