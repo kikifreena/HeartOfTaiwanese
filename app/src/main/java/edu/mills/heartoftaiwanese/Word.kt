@@ -40,7 +40,7 @@ internal class Word(input: String?) {
     }
 
     private fun convertToString(hex: String): String {
-        val split = hex.split("&#|;".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+        val split = hex.split("&#|;".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val sb = StringBuilder()
         for (curr in split) {
             val DIGITS_REGEX = Regex("""\d+""")
@@ -59,17 +59,9 @@ internal class Word(input: String?) {
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "POST"
         connection.setRequestProperty("Accept-Charset", "UTF-8")
-        val response = connection.responseCode
-        if (response == HttpURLConnection.HTTP_OK) {
-            val br = BufferedReader(InputStreamReader(connection.inputStream))
-            var input = br.readLine();
-            val resp = StringBuilder();
-            while (input != null) {
-                resp.append(input)
-                input = br.readLine();
-            }
-            br.close()
-            taiwanese = this.parse(resp.toString())
+        if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+            val inputAsString = connection.inputStream.bufferedReader().use { it.readText() }
+            taiwanese = parse(inputAsString);
         }
     }
 

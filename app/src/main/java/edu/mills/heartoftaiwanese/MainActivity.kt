@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
          *
          * @see .publishProgress
          */
-        lateinit private var w: Word
+        private lateinit var w: Word
 
         override fun doInBackground(vararg lang: LanguageContainer): Boolean? {
             if (lang[0].language == LANGUAGE_ENGLISH){
@@ -98,18 +98,10 @@ class MainActivity : AppCompatActivity() {
         connection.requestMethod = "POST"
         connection.setRequestProperty("Accept-Charset", "UTF-8")
         if (connection.responseCode == HttpURLConnection.HTTP_OK) {
-            val br = BufferedReader(InputStreamReader(connection.inputStream))
-            var input = br.readLine();
-            val resp = StringBuilder();
-            while (input != null) {
-                resp.append(input)
-                input = br.readLine();
-            }
-            br.close()
-            val res = resp.toString();
-            val start = res.indexOf('"')
-            val stop = res.indexOf('"', start)
-            return res.substring(start + 1, stop)
+            val inputAsString = connection.inputStream.bufferedReader().use { it.readText() }
+            val start = inputAsString.indexOf('"')
+            val stop = inputAsString.indexOf('"', start)
+            return inputAsString.substring(start + 1, stop)
         }
         return null
     }
