@@ -13,12 +13,12 @@ internal class Word(input: String?) {
         private set;
 
     init {
-        this.chinese = input
+        chinese = input
     }
 
     fun run(): Boolean {
         try {
-            this.crawlSite()
+            crawlSite()
             return taiwanese != INVALID_MESSAGE
         } catch (e: IOException) {
             e.printStackTrace()
@@ -42,9 +42,9 @@ internal class Word(input: String?) {
     private fun convertToString(hex: String): String {
         val split = hex.split("&#|;".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
         val sb = StringBuilder()
-        println(hex)
         for (curr in split) {
-            if (curr.matches("\\d+".toRegex())) {
+            val DIGITS_REGEX = Regex("""\d+""")
+            if (curr.matches(DIGITS_REGEX)) {
                 sb.append(Integer.parseInt(curr).toChar())
             } else {
                 sb.append(curr)
@@ -64,7 +64,7 @@ internal class Word(input: String?) {
             val br = BufferedReader(InputStreamReader(connection.inputStream))
             var input = br.readLine();
             val resp = StringBuilder();
-            while ((input) != null) {
+            while (input != null) {
                 resp.append(input)
                 input = br.readLine();
             }

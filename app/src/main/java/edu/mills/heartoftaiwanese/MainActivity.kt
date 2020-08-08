@@ -16,7 +16,6 @@ import java.net.URL
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -60,7 +59,7 @@ class MainActivity : AppCompatActivity() {
          *
          * @see .publishProgress
          */
-        private var w: Word? = null
+        lateinit private var w: Word
 
         override fun doInBackground(vararg lang: LanguageContainer): Boolean? {
             if (lang[0].language == LANGUAGE_ENGLISH){
@@ -70,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             else {
                 w = Word(lang[0].text)
             }
-            return w!!.run()
+            return w.run()
         }
 
         override fun onPostExecute(status: Boolean) {
@@ -78,10 +77,10 @@ class MainActivity : AppCompatActivity() {
                 Log.d("MainActivity-Taiwanese", w.toString())
                 tw_result.visibility = View.VISIBLE
                 result.visibility = View.VISIBLE
-                result.text = w!!.taiwanese
+                result.text = w.taiwanese
             } else {
-                val error = this@MainActivity.getText(R.string.error).toString()
-                Toast.makeText(this@MainActivity, error, Toast.LENGTH_LONG).show()
+                Toast.makeText(this@MainActivity,
+                    this@MainActivity.getText(R.string.error).toString(), Toast.LENGTH_LONG).show()
             }
             super.onPostExecute(status)
         }
@@ -94,16 +93,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     protected fun fetchChinese(english: String): String? {
-        val URL = URL("${URL_TO_CRAWL_ENCH}zh&tl=en&dt=t&q=$english")
-        val connection = URL.openConnection() as HttpURLConnection
+        val url = URL("${URL_TO_CRAWL_ENCH}zh&tl=en&dt=t&q=$english")
+        val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "POST"
         connection.setRequestProperty("Accept-Charset", "UTF-8")
-        val response = connection.responseCode
-        if (response == HttpURLConnection.HTTP_OK) {
+        if (connection.responseCode == HttpURLConnection.HTTP_OK) {
             val br = BufferedReader(InputStreamReader(connection.inputStream))
             var input = br.readLine();
             val resp = StringBuilder();
-            while ((input) != null) {
+            while (input != null) {
                 resp.append(input)
                 input = br.readLine();
             }
