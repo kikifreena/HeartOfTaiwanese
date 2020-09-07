@@ -4,7 +4,8 @@
     <string name="chinese">Chinese</string>
     <string name="search_ch">Chinese search</string>
     <string name="taiwanese_result">Taiwanese result:</string>
-    <string name="error">Error</string>
+    <string name="error">Unknown Error</string>
+    <string name="too_many_requests">Error: Too many requests. Please try again later, or use Chinese-only functionality.</string>
     <string name="sampleEnglishText">hippo</string>
     <string name="clear">clear</string>
     <string name="search_eng">English search</string>
