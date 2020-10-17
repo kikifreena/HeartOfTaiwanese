@@ -1,16 +1,23 @@
 package edu.mills.heartoftaiwanese
 
-import java.io.BufferedReader
+import android.util.Log
 import java.io.IOException
-import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-internal class Word(input: String?) {
-    private var chinese : String? = null
-        private set;
+class WordRetriever(input: String?) {
+    private var chinese: String? = null
     var taiwanese = ""
-        private set;
+        private set
+
+    companion object {
+        private const val URL_TO_CRAWL_TW = "http://210.240.194.97/q/THq.asp?w="
+        private const val URL_TO_CRAWL_ENCH =
+            "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=en"
+        private const val INVALID_MESSAGE = "Not found"
+        const val kUnknownError = "UNKNOWN ERROR"
+        const val kRateLimited = "RATE LIMITED"
+    }
 
     init {
         chinese = input
@@ -24,7 +31,6 @@ internal class Word(input: String?) {
             e.printStackTrace()
             return false
         }
-
     }
 
     private fun parse(data: String): String {
@@ -61,14 +67,29 @@ internal class Word(input: String?) {
         connection.setRequestProperty("Accept-Charset", "UTF-8")
         if (connection.responseCode == HttpURLConnection.HTTP_OK) {
             val inputAsString = connection.inputStream.bufferedReader().use { it.readText() }
-            taiwanese = parse(inputAsString);
+            taiwanese = parse(inputAsString)
         }
     }
 
-
-
-    companion object {
-        private const val URL_TO_CRAWL_TW = "http://210.240.194.97/q/THq.asp?w="
-        private const val INVALID_MESSAGE = "Not found"
+    fun fetchChinese(english: String): String {
+        Log.d("MainActivity", "Fetching Chinese for $english")
+        val url = URL("${URL_TO_CRAWL_ENCH}&dt=t&q=$english")
+        // https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh&dt=t&q=hello
+        val connection = url.openConnection() as HttpURLConnection
+        connection.requestMethod = "GET"
+        connection.setRequestProperty("Accept-Charset", "UTF-8")
+        Log.d("MainActivity", connection.responseCode.toString())
+        if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+            val inputAsString = connection.inputStream.bufferedReader().use { it.readText() }
+            val start = inputAsString.indexOf('"')
+            val stop = inputAsString.indexOf('"', start + 1)
+            return inputAsString.substring(start + 1, stop)
+        } else if (connection.responseCode == 429) {
+            Log.d("MainActivity", "too many HTTP requests")
+            return kRateLimited
+        } else {
+            Log.i("MainActivity", connection.responseMessage)
+            return kUnknownError
+        }
     }
 }
