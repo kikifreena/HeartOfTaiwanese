@@ -1,14 +1,13 @@
 package edu.mills.heartoftaiwanese.activity
 
+import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import edu.mills.heartoftaiwanese.databinding.ActivityMainBinding
-import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.activity_main.bottomNavigationBar
 
 abstract class MainActivity : AppCompatActivity(),
     BottomNavigationView.OnNavigationItemSelectedListener {
@@ -17,38 +16,31 @@ abstract class MainActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         getViewBinding()
         initializeClickListeners()
     }
 
-    abstract fun getViewBinding()
+    protected abstract fun getViewBinding()
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item) {
-            binding.root.bottomNavigationBar[1] -> launchHome()
-            binding.root.bottomNavigationBar[2] -> launchRecent()
-            binding.root.bottomNavigationBar[3] -> launchFavorites()
-            else -> return false
-        }
+    abstract override fun onNavigationItemSelected(item: MenuItem): Boolean
+
+    protected open fun initializeClickListeners() {
+        bottomNavigationBar.setOnNavigationItemSelectedListener(this)
+    }
+
+    private fun launchHome(context: Context): Boolean {
+        Toast.makeText(context, "HOME", Toast.LENGTH_SHORT).show()
         return true
     }
 
-    protected open fun initializeClickListeners() {
-        binding.root.bottomNavigationBar.setOnNavigationItemSelectedListener(this)
+    private fun launchFavorites(context: Context): Boolean {
+        Toast.makeText(context, "FAV", Toast.LENGTH_SHORT).show()
+        return true
     }
 
-    private fun launchHome() {
-        Toast.makeText(this, "HOME", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun launchFavorites() {
-        Toast.makeText(this, "FAV", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun launchRecent() {
-        Toast.makeText(this, "RECENT", Toast.LENGTH_SHORT).show()
+    private fun launchRecent(context: Context): Boolean {
+        Toast.makeText(context, "RECENT", Toast.LENGTH_SHORT).show()
+        return true
     }
 
     protected data class LanguageContainer internal constructor(

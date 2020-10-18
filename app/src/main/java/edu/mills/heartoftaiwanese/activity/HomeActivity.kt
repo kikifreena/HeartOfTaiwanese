@@ -2,6 +2,7 @@ package edu.mills.heartoftaiwanese.activity
 
 import android.os.AsyncTask
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import edu.mills.heartoftaiwanese.R
@@ -21,6 +22,13 @@ class HomeActivity : MainActivity() {
     override fun getViewBinding() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item) {
+            item -> return true
+        }
+        return true
     }
 
     override fun initializeClickListeners() {
