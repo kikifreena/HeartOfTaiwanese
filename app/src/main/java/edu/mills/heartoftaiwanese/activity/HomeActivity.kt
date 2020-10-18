@@ -1,35 +1,30 @@
-package edu.mills.heartoftaiwanese.main
+package edu.mills.heartoftaiwanese.activity
 
 import android.os.AsyncTask
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import edu.mills.heartoftaiwanese.R
 import edu.mills.heartoftaiwanese.WordRetriever
-import edu.mills.heartoftaiwanese.databinding.ActivityMainBinding
+import edu.mills.heartoftaiwanese.databinding.ActivityHomeBinding
 
-class MainActivity : AppCompatActivity() {
+
+class HomeActivity : MainActivity() {
     companion object {
         const val LANGUAGE_ENGLISH = 1
         const val LANGUAGE_CHINESE = 0
         private const val kResultOk = "SUCCESS"
     }
 
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var clView: View
+    private lateinit var binding: ActivityHomeBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
+    override fun getViewBinding() {
+        binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        initializeClickListeners()
     }
 
-    private fun initializeClickListeners() {
+    override fun initializeClickListeners() {
+        super.initializeClickListeners()
         binding.submitCh.setOnClickListener {
             binding.twResult.visibility = View.GONE
             binding.result.visibility = View.GONE
@@ -105,12 +100,12 @@ class MainActivity : AppCompatActivity() {
         override fun onPostExecute(status: String) {
             if (status == WordRetriever.kRateLimited) {
                 Toast.makeText(
-                    this@MainActivity,
+                    this@HomeActivity,
                     getText(R.string.too_many_requests),
                     Toast.LENGTH_LONG
                 ).show()
             } else if (status == WordRetriever.kUnknownError) {
-                Toast.makeText(this@MainActivity, getText(R.string.error), Toast.LENGTH_LONG).show()
+                Toast.makeText(this@HomeActivity, getText(R.string.error), Toast.LENGTH_LONG).show()
             } else {
                 Log.d("MainActivity-Taiwanese", w.toString())
                 binding.twResult.visibility = View.VISIBLE
@@ -120,4 +115,5 @@ class MainActivity : AppCompatActivity() {
             super.onPostExecute(status)
         }
     }
+
 }
