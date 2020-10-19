@@ -1,6 +1,9 @@
 package edu.mills.heartoftaiwanese
 
+import android.os.AsyncTask
 import android.util.Log
+import edu.mills.heartoftaiwanese.data.Language
+import edu.mills.heartoftaiwanese.data.LanguageContainer
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -17,6 +20,7 @@ class WordRetriever(input: String?) {
         private const val INVALID_MESSAGE = "Not found"
         const val kUnknownError = "UNKNOWN ERROR"
         const val kRateLimited = "RATE LIMITED"
+        private const val kResultOk = "SUCCESS"
     }
 
     init {
@@ -91,5 +95,46 @@ class WordRetriever(input: String?) {
             Log.i("MainActivity", connection.responseMessage)
             return kUnknownError
         }
+    }
+
+
+    inner class ParseWordTask : AsyncTask<LanguageContainer, Int, String>() {
+        /**
+         * Override this method to perform a computation on a background thread. The
+         * specified parameters are the parameters passed to [.execute]
+         * by the caller of this task.
+         *
+         *
+         * This method can call [.publishProgress] to publish updates
+         * on the UI thread.
+         *
+         * @see .onPreExecute
+         * @see .onPostExecute
+         *
+         * @see .publishProgress
+         */
+        private lateinit var w: WordRetriever
+
+        override fun doInBackground(vararg lang: LanguageContainer): String? {
+            if (lang[0].language == Language.LANGUAGE_ENGLISH) {
+                val chineseString = w.fetchChinese(lang[0].text)
+                if (chineseString == kUnknownError) {
+                    return kUnknownError
+                } else if (chineseString == kRateLimited) {
+                    return kRateLimited
+                } else {
+                    w = WordRetriever(chineseString)
+                }
+            } else {
+                w = WordRetriever(lang[0].text)
+            }
+            val status = w.run()
+            if (!status) {
+                return kUnknownError
+            } else {
+                return kResultOk
+            }
+        }
+
     }
 }
