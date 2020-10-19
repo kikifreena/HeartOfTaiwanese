@@ -1,19 +1,20 @@
 package edu.mills.heartoftaiwanese.activity
 
 import android.os.AsyncTask
+import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import edu.mills.heartoftaiwanese.R
 import edu.mills.heartoftaiwanese.WordRetriever
 import edu.mills.heartoftaiwanese.databinding.ActivityHomeBinding
 
-
 class HomeActivity : MainActivity() {
     companion object {
         const val LANGUAGE_ENGLISH = 1
         const val LANGUAGE_CHINESE = 0
+        private const val kSavedChineseText = "SavedChineseText"
+        private const val kSavedEnglishText = "SavedEnglishText"
         private const val kResultOk = "SUCCESS"
     }
 
@@ -24,11 +25,18 @@ class HomeActivity : MainActivity() {
         setContentView(binding.root)
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item) {
-            item -> return true
+    override fun onSaveInstanceState(state: Bundle) {
+        super.onSaveInstanceState(state)
+        state.putString(kSavedChineseText, binding.editTextCh.text.toString())
+        state.putString(kSavedEnglishText, binding.editTextEng.text.toString())
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        savedInstanceState?.let {
+            binding.editTextCh.setText(it.getString(kSavedChineseText))
+            binding.editTextEng.setText(it.getString(kSavedEnglishText))
         }
-        return true
     }
 
     override fun initializeClickListeners() {
@@ -93,7 +101,6 @@ class HomeActivity : MainActivity() {
                 } else {
                     w = WordRetriever(chineseString)
                 }
-//                Log.d("MainActivity", w.toString())
             } else {
                 w = WordRetriever(lang[0].text)
             }
