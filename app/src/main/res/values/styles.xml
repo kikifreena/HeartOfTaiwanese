@@ -4,16 +4,31 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:fontFamily">@font/average</item>
+        <item name="android:fontFamily">@font/nunito_extralight</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:windowBackground">@color/colorBackground</item>
-        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="Title" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:fontFamily">@font/nunito_semibold</item>
     </style>
 
     <style name="SearchButton" parent="Widget.AppCompat.Button">
         <item name="android:backgroundTint">@color/colorPrimaryDark</item>
         <item name="android:textColor">@color/textColorLight</item>
         <item name="textAllCaps">false</item>
-        <item name="android:fontFamily">@font/nunito_extralight</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:fontFamily">@font/nunito_semibold</item>
         <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="BottomNavView" parent="Widget.Design.BottomNavigationView">
+        <item name="itemTextColor">@color/bottom_bar_colors</item>
+        <item name="itemIconTint">@color/bottom_bar_colors</item>
     </style>
 </resources>

@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import edu.mills.heartoftaiwanese.R
 import edu.mills.heartoftaiwanese.WordRetriever
 import edu.mills.heartoftaiwanese.data.Language
 import edu.mills.heartoftaiwanese.data.LanguageContainer
 import edu.mills.heartoftaiwanese.databinding.FragmentHomeBinding
+import java.util.Calendar
 
 /**
  * A simple [Fragment] subclass.
@@ -68,10 +70,22 @@ class HomeFragment : Fragment() {
             binding.editTextCh.setText(it.getString(kSavedChineseText))
             binding.editTextEng.setText(it.getString(kSavedEnglishText))
         }
+        val currentHour: Int = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+        binding.tvTranslateExplanation.text = getString(
+            R.string.translationFragmentExplanation,
+            isMorningAfternoonEvening(currentHour)
+        )
         initializeClickListeners()
         return binding.root
     }
 
+    private fun isMorningAfternoonEvening(hour: Int): String {
+        return when (hour) {
+            in 4..12 -> resources.getStringArray(R.array.timeOfDay)[0] // morning
+            in 12..17 -> resources.getStringArray(R.array.timeOfDay)[1] // afternoon
+            else -> resources.getStringArray(R.array.timeOfDay)[2] // evening
+        }
+    }
 
     private fun initializeClickListeners() {
         binding.submitCh.setOnClickListener {

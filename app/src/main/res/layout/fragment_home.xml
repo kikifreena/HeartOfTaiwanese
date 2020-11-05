@@ -11,27 +11,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp">
+            android:layout_height="0dp"
+            android:layout_margin="16dp">
+
+            <TextView
+                android:id="@+id/tvTranslateTitle"
+                style="@style/Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/translationsTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvTranslateExplanation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/translationFragmentExplanation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTranslateTitle" />
 
             <EditText
                 android:id="@+id/editTextCh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
                 android:ems="10"
                 android:hint="@string/chinese"
                 android:importantForAutofill="no"
-                android:inputType="text"
+                android:inputType="text|textNoSuggestions"
                 android:text="河馬"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/tvTranslateExplanation" />
 
             <Button
                 android:id="@+id/submit_ch"
@@ -47,10 +72,12 @@
                 android:id="@+id/editTextEng"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
                 android:ems="10"
                 android:hint="@string/english"
                 android:importantForAutofill="no"
-                android:inputType="text"
+                android:inputType="textNoSuggestions|text"
                 android:text="@string/sampleEnglishText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -70,14 +97,18 @@
                 android:id="@+id/clearButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/clear"
+                android:layout_margin="16dp"
                 android:backgroundTint="@color/colorBackground"
+                android:text="@string/clear"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/submit_en" />
 
             <TextView
                 android:id="@+id/twResult"
+                style="@style/Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/taiwanese_result"
@@ -86,6 +117,7 @@
                 app:layout_constraintBottom_toTopOf="@id/result"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/clearButton"
+                app:layout_constraintVertical_bias="0.8"
                 tools:visibility="visible" />
 
             <TextView

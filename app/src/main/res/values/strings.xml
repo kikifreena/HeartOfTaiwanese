@@ -2,16 +2,23 @@
     <string name="app_name">Heart of Taiwanese</string>
     <string name="english">English</string>
     <string name="chinese">Chinese</string>
-    <string name="search_ch">Chinese search</string>
-    <string name="taiwanese_result">Taiwanese result:</string>
+    <string name="search_ch">Search with Chinese</string>
+    <string name="taiwanese_result">Taiwanese result</string>
     <string name="error">Unknown Error</string>
     <string name="too_many_requests">Error: Too many requests. Please try again later, or use Chinese-only functionality.</string>
     <string name="sampleEnglishText">hippo</string>
     <string name="clear">clear</string>
-    <string name="search_eng">English search</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_eng">Search with English</string>
     <string name="menu_favorites">Favorites</string>
-    <string name="menu_recents">Recents</string>
+    <string name="menu_recent">Recent</string>
     <string name="menu_home">Home</string>
+    <string name="translationFragmentExplanation">Good %1$s! What would you like to translate today?</string>
+    <string name="translationsTitle">Translations</string>
+    <string name="recentFragmentTitle">Recently viewed</string>
+    <string name="favoritesFragmentTitle">Favorites</string>
+    <string-array name="timeOfDay">
+        <item>morning</item>
+        <item>afternoon</item>
+        <item>evening</item>
+    </string-array>
 </resources>
