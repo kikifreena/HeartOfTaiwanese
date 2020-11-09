@@ -16,6 +16,8 @@
     <string name="translationsTitle">Translations</string>
     <string name="recentFragmentTitle">Recently viewed</string>
     <string name="favoritesFragmentTitle">Favorites</string>
+    <string name="favoritesNoneMessage">There are no favorites to display.</string>
+    <string name="recentlyViewedNone">There are no recently viewed items to display.</string>
     <string-array name="timeOfDay">
         <item>morning</item>
         <item>afternoon</item>

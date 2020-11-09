@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun launchFavorites(context: Context): Boolean {
-        Toast.makeText(context, "FAV", Toast.LENGTH_SHORT).show()
         supportFragmentManager.beginTransaction().replace(
             R.id.fragment_container,
             FavoritesFragment()
@@ -58,7 +57,6 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun launchRecent(context: Context): Boolean {
-        Toast.makeText(context, "RECENT", Toast.LENGTH_SHORT).show()
         supportFragmentManager.beginTransaction().replace(
             R.id.fragment_container,
             RecentFragment()
