@@ -13,7 +13,7 @@ class TranslationDatabaseHelper(context: Context) :
      * @param db The database.
      */
     override fun onCreate(db: SQLiteDatabase?) {
-        TODO("Not yet implemented")
+        TODO("Not yet implemented - under construction")
 
 //        db.execSQL("CREATE TABLE DRINK ("
 //                + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "

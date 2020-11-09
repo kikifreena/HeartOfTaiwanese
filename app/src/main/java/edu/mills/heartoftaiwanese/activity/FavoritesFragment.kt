@@ -18,4 +18,6 @@ class FavoritesFragment : Fragment() {
         binding = FragmentFavoritesBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
+
+    // Todo: Under construction
 }

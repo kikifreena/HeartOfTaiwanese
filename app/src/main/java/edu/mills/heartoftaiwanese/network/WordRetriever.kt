@@ -41,6 +41,7 @@ class WordRetriever(input: String?) {
          *
          * @see .publishProgress
          */
+        // TODO: convert to kotlin coroutine
         private lateinit var w: WordRetriever
 
         override fun doInBackground(vararg lang: LanguageContainer): String? {

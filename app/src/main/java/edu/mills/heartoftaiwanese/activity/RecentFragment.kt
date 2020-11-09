@@ -18,4 +18,5 @@ class RecentFragment : Fragment() {
         binding = FragmentRecentBinding.inflate(layoutInflater)
         return binding.root
     }
+    // Todo: Under construction
 }
