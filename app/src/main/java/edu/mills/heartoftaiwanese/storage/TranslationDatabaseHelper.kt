@@ -1,4 +1,4 @@
-package edu.mills.heartoftaiwanese
+package edu.mills.heartoftaiwanese.storage
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase

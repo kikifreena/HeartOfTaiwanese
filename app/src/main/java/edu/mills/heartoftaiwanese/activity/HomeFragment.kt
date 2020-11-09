@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import edu.mills.heartoftaiwanese.R
-import edu.mills.heartoftaiwanese.WordRetriever
 import edu.mills.heartoftaiwanese.data.Language
 import edu.mills.heartoftaiwanese.data.LanguageContainer
 import edu.mills.heartoftaiwanese.databinding.FragmentHomeBinding
+import edu.mills.heartoftaiwanese.network.WordRetriever
 import java.util.Calendar
 
 /**
@@ -19,8 +19,6 @@ import java.util.Calendar
  */
 class HomeFragment : Fragment() {
     companion object {
-        const val LANGUAGE_ENGLISH = 1
-        const val LANGUAGE_CHINESE = 0
         private const val kSavedChineseText = "SavedChineseText"
         private const val kSavedEnglishText = "SavedEnglishText"
 
@@ -28,32 +26,14 @@ class HomeFragment : Fragment() {
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
          * @return A new instance of fragment HomeFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString("ARG_PARAM1", param1)
-                    putString("ARG_PARAM2", param2)
-                }
-            }
+        fun newInstance() =
+            HomeFragment()
     }
 
-    private var param1: String? = null
-    private var param2: String? = null
     private lateinit var binding: FragmentHomeBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-//            param1 = it.getString(ARG_PARAM1)
-//            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onSaveInstanceState(state: Bundle) {
         super.onSaveInstanceState(state)
