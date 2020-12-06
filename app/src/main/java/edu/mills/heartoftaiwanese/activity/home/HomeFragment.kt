@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import edu.mills.heartoftaiwanese.R
-import edu.mills.heartoftaiwanese.data.Language
-import edu.mills.heartoftaiwanese.data.LanguageContainer
 import edu.mills.heartoftaiwanese.databinding.FragmentHomeBinding
-import edu.mills.heartoftaiwanese.network.WordRetriever
+import edu.mills.heartoftaiwanese.network.WebResultCodes
 import java.util.Calendar
 
 /**
@@ -34,6 +33,7 @@ class HomeFragment : Fragment(), HomeContract.HomeView {
     }
 
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var viewModel: HomeContract.HomeViewModel
 
     override fun onSaveInstanceState(state: Bundle) {
         super.onSaveInstanceState(state)
@@ -44,7 +44,7 @@ class HomeFragment : Fragment(), HomeContract.HomeView {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         savedInstanceState?.let {
             binding.editTextCh.setText(it.getString(kSavedChineseText))
@@ -55,6 +55,8 @@ class HomeFragment : Fragment(), HomeContract.HomeView {
             R.string.translationFragmentExplanation,
             isMorningAfternoonEvening(currentHour)
         )
+        viewModel = HomeViewModel()
+        viewModel.configure(this)
         initializeClickListeners()
         // TODO: There is a bug when you expand/close the keyboard, part of the screen disappears
         return binding.root
@@ -70,24 +72,17 @@ class HomeFragment : Fragment(), HomeContract.HomeView {
 
     private fun initializeClickListeners() {
         binding.submitCh.setOnClickListener {
-            binding.twResult.visibility = View.GONE
-            binding.result.visibility = View.GONE
-
-            WordRetriever("").ParseWordTask().execute(
-                LanguageContainer(
-                    binding.editTextCh.text.toString(),
-                    Language.LANGUAGE_CHINESE
-                )
+            hideForSubmit()
+            binding.editTextEng.visibility = View.GONE
+            viewModel.fetchTaiwanese(
+                binding.editTextCh.text.toString()
             )
         }
         binding.submitEn.setOnClickListener {
-            binding.twResult.visibility = View.GONE
-            binding.result.visibility = View.GONE
-            WordRetriever("").ParseWordTask().execute(
-                LanguageContainer(
-                    binding.editTextEng.text.toString(),
-                    Language.LANGUAGE_ENGLISH
-                )
+            hideForSubmit()
+            binding.editTextCh.visibility = View.GONE
+            viewModel.fetchChinese(
+                binding.editTextEng.text.toString()
             )
         }
         binding.clearButton.setOnClickListener {
@@ -98,11 +93,54 @@ class HomeFragment : Fragment(), HomeContract.HomeView {
         }
     }
 
-    override fun onChineseFetched() {
-        TODO("Not yet implemented")
+    private fun hideForSubmit() {
+        binding.twResult.visibility = View.GONE
+        binding.result.visibility = View.GONE
+        binding.progressBarLoading.visibility = View.VISIBLE
+        binding.submitCh.visibility = View.GONE
+        binding.submitEn.visibility = View.INVISIBLE
+        binding.clearButton.visibility = View.INVISIBLE
     }
 
-    override fun onTaiwaneseFetched() {
-        TODO("Not yet implemented")
+    private fun showAfterSubmit() {
+        binding.progressBarLoading.visibility = View.GONE
+        binding.twResult.visibility = View.VISIBLE
+        binding.result.visibility = View.VISIBLE
+        binding.submitCh.visibility = View.VISIBLE
+        binding.submitEn.visibility = View.VISIBLE
+        binding.clearButton.visibility = View.VISIBLE
+    }
+
+    override fun onChineseFetched(chinese: String) {
+        showAfterSubmit()
+//        TODO("Not yet implemented")
+    }
+
+    override fun onTaiwaneseFetched(taiwanese: String) {
+        showAfterSubmit()
+//        TODO("Not yet implemented")
+    }
+
+    override fun onNetworkError(error: WebResultCodes) {
+        showAfterSubmit()
+        when (error) {
+            WebResultCodes.RATE_LIMITED -> Toast.makeText(
+                activity,
+                getText(R.string.too_many_requests),
+                Toast.LENGTH_LONG
+            ).show()
+            WebResultCodes.INVALID_NOT_FOUND -> Toast.makeText(
+                activity,
+                getText(R.string.errorNotFound),
+                Toast.LENGTH_LONG
+            ).show()
+            WebResultCodes.UNKNOWN_ERROR -> Toast.makeText(
+                activity,
+                getText(R.string.error),
+                Toast.LENGTH_LONG
+            ).show()
+            // Bad state
+            WebResultCodes.RESULT_OK -> throw IllegalStateException("Do not call error when there's no error")
+        }
     }
 }

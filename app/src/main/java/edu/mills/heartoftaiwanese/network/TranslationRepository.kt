@@ -8,7 +8,10 @@ import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
 
-class TranslationRepository private constructor() {
+/**
+ * A class for making network calls only.
+ */
+class TranslationRepository {
     companion object {
         private const val URL_TO_CRAWL_TW = "http://210.240.194.97/q/THq.asp?w="
         private const val URL_TO_CRAWL_ENCH =
