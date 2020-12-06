@@ -1,4 +1,4 @@
-package edu.mills.heartoftaiwanese.activity
+package edu.mills.heartoftaiwanese.activity.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,7 +17,7 @@ import java.util.Calendar
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), HomeContract.HomeView {
     companion object {
         private const val kSavedChineseText = "SavedChineseText"
         private const val kSavedEnglishText = "SavedEnglishText"
@@ -96,5 +96,13 @@ class HomeFragment : Fragment() {
             binding.twResult.visibility = View.GONE
             binding.result.visibility = View.GONE
         }
+    }
+
+    override fun onChineseFetched() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onTaiwaneseFetched() {
+        TODO("Not yet implemented")
     }
 }

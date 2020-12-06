@@ -1,5 +1,6 @@
 package edu.mills.heartoftaiwanese.network
 
+import kotlinx.coroutines.CoroutineScope
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -21,6 +22,13 @@ class ChineseToTaiwaneseHelper {
         } else {
             return WebResultCodes.INVALID_NOT_FOUND.toString()
         }
+    }
+
+    fun getTaiwaneseFromRepository(scope: CoroutineScope) {
+//        scope.launch {
+//            TranslationRepository.
+//        }
+// TODO: Not working
     }
 
     private fun parse(data: String): String {

@@ -8,12 +8,11 @@ import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
 
-class ChineseToTaiwaneseRepository {
+class TranslationRepository private constructor() {
     companion object {
         private const val URL_TO_CRAWL_TW = "http://210.240.194.97/q/THq.asp?w="
         private const val URL_TO_CRAWL_ENCH =
             "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=en"
-
     }
 
     suspend fun getTaiwanese(chinese: String): TaiwaneseResult {

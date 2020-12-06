@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import edu.mills.heartoftaiwanese.R
+import edu.mills.heartoftaiwanese.activity.home.HomeFragment
 import edu.mills.heartoftaiwanese.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.bottomNavigationBar
 
@@ -19,7 +20,10 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, HomeFragment())
+        supportFragmentManager.beginTransaction().replace(
+            R.id.fragment_container,
+            HomeFragment()
+        )
             .commit()
         initializeClickListeners()
     }
