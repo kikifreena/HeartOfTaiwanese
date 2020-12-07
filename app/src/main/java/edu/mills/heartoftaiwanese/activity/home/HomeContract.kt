@@ -1,12 +1,12 @@
 package edu.mills.heartoftaiwanese.activity.home
 
-import edu.mills.heartoftaiwanese.network.WebResultCodes
+import edu.mills.heartoftaiwanese.network.WebResultCode
 
 interface HomeContract {
     interface HomeView {
         fun onChineseFetched(chinese: String)
         fun onTaiwaneseFetched(taiwanese: String)
-        fun onNetworkError(error: WebResultCodes)
+        fun onNetworkError(error: WebResultCode)
     }
 
     interface HomeViewModel {

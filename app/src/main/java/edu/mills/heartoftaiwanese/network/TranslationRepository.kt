@@ -25,10 +25,10 @@ class TranslationRepository {
             connection.requestMethod = "POST"
             connection.setRequestProperty("Accept-Charset", "UTF-8")
             if (connection.responseCode == HttpURLConnection.HTTP_OK) {
-                TaiwaneseResult(WebResultCodes.RESULT_OK, connection.inputStream.bufferedReader()
+                TaiwaneseResult(WebResultCode.RESULT_OK, connection.inputStream.bufferedReader()
                     .use { it.readText() })
             } else {
-                TaiwaneseResult(WebResultCodes.INVALID_NOT_FOUND)
+                TaiwaneseResult(WebResultCode.INVALID_NOT_FOUND)
             }
         }
     }
@@ -48,17 +48,17 @@ class TranslationRepository {
                     val start = inputAsString.indexOf('"')
                     val stop = inputAsString.indexOf('"', start + 1)
                     ChineseResult(
-                        WebResultCodes.RESULT_OK,
+                        WebResultCode.RESULT_OK,
                         inputAsString.substring(start + 1, stop)
                     )
                 }
                 429 -> {
                     Log.e("TranslationRepository", "too many HTTP requests")
-                    ChineseResult(WebResultCodes.RATE_LIMITED)
+                    ChineseResult(WebResultCode.RATE_LIMITED)
                 }
                 else -> {
                     Log.e("TranslationRepository", connection.responseMessage)
-                    ChineseResult(WebResultCodes.UNKNOWN_ERROR)
+                    ChineseResult(WebResultCode.UNKNOWN_ERROR)
                 }
             }
         }

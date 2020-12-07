@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import edu.mills.heartoftaiwanese.R
 import edu.mills.heartoftaiwanese.databinding.FragmentHomeBinding
-import edu.mills.heartoftaiwanese.network.WebResultCodes
+import edu.mills.heartoftaiwanese.network.WebResultCode
 import java.util.Calendar
 
 /**
@@ -107,40 +107,46 @@ class HomeFragment : Fragment(), HomeContract.HomeView {
         binding.twResult.visibility = View.VISIBLE
         binding.result.visibility = View.VISIBLE
         binding.submitCh.visibility = View.VISIBLE
+        binding.editTextCh.visibility = View.VISIBLE
         binding.submitEn.visibility = View.VISIBLE
+        binding.editTextEng.visibility = View.VISIBLE
         binding.clearButton.visibility = View.VISIBLE
     }
 
     override fun onChineseFetched(chinese: String) {
-        showAfterSubmit()
-//        TODO("Not yet implemented")
+        viewModel.fetchTaiwanese(chinese)
+        activity?.runOnUiThread {
+            showAfterSubmit()
+        }
     }
 
     override fun onTaiwaneseFetched(taiwanese: String) {
-        showAfterSubmit()
-//        TODO("Not yet implemented")
+        binding.result.text = taiwanese
+        activity?.runOnUiThread {
+            showAfterSubmit()
+        }
     }
 
-    override fun onNetworkError(error: WebResultCodes) {
+    override fun onNetworkError(error: WebResultCode) {
         showAfterSubmit()
         when (error) {
-            WebResultCodes.RATE_LIMITED -> Toast.makeText(
+            WebResultCode.RATE_LIMITED -> Toast.makeText(
                 activity,
                 getText(R.string.too_many_requests),
                 Toast.LENGTH_LONG
             ).show()
-            WebResultCodes.INVALID_NOT_FOUND -> Toast.makeText(
+            WebResultCode.INVALID_NOT_FOUND -> Toast.makeText(
                 activity,
                 getText(R.string.errorNotFound),
                 Toast.LENGTH_LONG
             ).show()
-            WebResultCodes.UNKNOWN_ERROR -> Toast.makeText(
+            WebResultCode.UNKNOWN_ERROR -> Toast.makeText(
                 activity,
                 getText(R.string.error),
                 Toast.LENGTH_LONG
             ).show()
             // Bad state
-            WebResultCodes.RESULT_OK -> throw IllegalStateException("Do not call error when there's no error")
+            WebResultCode.RESULT_OK -> throw IllegalStateException("Do not call error when there's no error")
         }
     }
 }

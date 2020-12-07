@@ -25,10 +25,10 @@ class EnglishToChineseHelper {
             return inputAsString.substring(start + 1, stop)
         } else if (connection.responseCode == 429) {
             Log.d("MainActivity", "too many HTTP requests")
-            return WebResultCodes.RATE_LIMITED.toString()
+            return WebResultCode.RATE_LIMITED.toString()
         } else {
             Log.i("MainActivity", connection.responseMessage)
-            return WebResultCodes.UNKNOWN_ERROR.toString()
+            return WebResultCode.UNKNOWN_ERROR.toString()
         }
     }
 }

@@ -7,7 +7,7 @@ package edu.mills.heartoftaiwanese.network
  * OK: Success
  * Unknown: Something else happened
  */
-enum class WebResultCodes {
+enum class WebResultCode {
     RESULT_OK,
     UNKNOWN_ERROR,
     RATE_LIMITED,

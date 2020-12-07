@@ -1,73 +1,47 @@
 package edu.mills.heartoftaiwanese.network
 
-import edu.mills.heartoftaiwanese.activity.home.HomeContract
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
+import androidx.lifecycle.ViewModel
+import edu.mills.heartoftaiwanese.data.TaiwaneseResult
 
 /**
+ * Class for requesting network calls and parsing the result.
  * This class does not make network calls. It calls [TranslationRepository] to make the calls.
  * Then it will parse them and send them to the [ViewModel].
  */
 class ChineseToTaiwaneseHelper(
-    private val repository: TranslationRepository,
-    private val scope: CoroutineScope,
-    private val view: HomeContract.HomeView
+    private val repository: TranslationRepository
 ) {
-    companion object {
-        private const val URL_TO_CRAWL_TW = "http://210.240.194.97/q/THq.asp?w="
+    private val digitsRegex by lazy {
+        Regex("""\d+""")
     }
 
-    @Throws(IOException::class)
-    fun crawlSite(chinese: String): String {
-        val url = URL("$URL_TO_CRAWL_TW$chinese")
-        val connection = url.openConnection() as HttpURLConnection
-        connection.requestMethod = "POST"
-        connection.setRequestProperty("Accept-Charset", "UTF-8")
-        if (connection.responseCode == HttpURLConnection.HTTP_OK) {
-            val inputAsString = connection.inputStream.bufferedReader().use { it.readText() }
-            return parse(inputAsString)
-        } else {
-            return WebResultCodes.INVALID_NOT_FOUND.toString()
-        }
-    }
-
-    fun getTaiwanese(chinese: String) {
-        scope.launch {
-            val taiwaneseResult = repository.getTaiwanese(chinese)
-            when (taiwaneseResult.result) {
-                WebResultCodes.RESULT_OK -> taiwaneseResult.taiwanese?.let {
-                    try {
-                        parse(it)
-                        view.onTaiwaneseFetched(it)
-                    } catch (e: StringIndexOutOfBoundsException) {
-                        view.onNetworkError(WebResultCodes.INVALID_NOT_FOUND)
-                    }
+    suspend fun getTaiwanese(chinese: String): TaiwaneseResult {
+        val taiwaneseResult: TaiwaneseResult = repository.getTaiwanese(chinese)
+        return when (taiwaneseResult.resultCode) {
+            WebResultCode.RESULT_OK -> taiwaneseResult.taiwanese?.let {
+                try {
+                    TaiwaneseResult(WebResultCode.RESULT_OK, parse(it))
+                } catch (exception: StringIndexOutOfBoundsException) {
+                    exception.printStackTrace()
+                    TaiwaneseResult(WebResultCode.UNKNOWN_ERROR, "")
                 }
-                else -> view.onNetworkError(taiwaneseResult.result)
-            }
+            } ?: TaiwaneseResult(WebResultCode.INVALID_NOT_FOUND, "")
+            else -> taiwaneseResult
         }
     }
 
     private fun parse(data: String): String {
-        try {
-            val loc = data.indexOf("台語羅馬字")
-            val loc2 = 1 + data.indexOf(">", data.indexOf("<span", loc))
-            val loc3 = data.indexOf("</span>", loc2)
-            return convertToString(data.substring(loc2, loc3))
-        } catch (e: StringIndexOutOfBoundsException) {
-            return WebResultCodes.INVALID_NOT_FOUND.toString()
-        }
+        val loc = data.indexOf("台語羅馬字")
+        val loc2 = 1 + data.indexOf(">", data.indexOf("<span", loc))
+        val loc3 = data.indexOf("</span>", loc2)
+        return convertToString(data.substring(loc2, loc3))
     }
 
     private fun convertToString(hex: String): String {
         val split = hex.split("&#|;".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val sb = StringBuilder()
         for (curr in split) {
-            val DIGITS_REGEX = Regex("""\d+""")
-            if (curr.matches(DIGITS_REGEX)) {
+            if (curr.matches(digitsRegex)) {
                 sb.append(Integer.parseInt(curr).toChar())
             } else {
                 sb.append(curr)

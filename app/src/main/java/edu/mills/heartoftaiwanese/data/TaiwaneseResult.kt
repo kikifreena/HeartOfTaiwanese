@@ -1,8 +1,8 @@
 package edu.mills.heartoftaiwanese.data
 
-import edu.mills.heartoftaiwanese.network.WebResultCodes
+import edu.mills.heartoftaiwanese.network.WebResultCode
 
-data class TaiwaneseResult(val result: WebResultCodes, val taiwanese: String? = null) {
+data class TaiwaneseResult(val resultCode: WebResultCode, val taiwanese: String? = null) {
     val isTaiwanese = true
     val isChinese = false
 }
