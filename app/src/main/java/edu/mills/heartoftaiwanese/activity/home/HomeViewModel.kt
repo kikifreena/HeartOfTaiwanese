@@ -1,6 +1,7 @@
 package edu.mills.heartoftaiwanese.activity.home
 
 import edu.mills.heartoftaiwanese.network.ChineseToTaiwaneseHelper
+import edu.mills.heartoftaiwanese.network.EnglishToChineseHelper
 import edu.mills.heartoftaiwanese.network.TranslationRepository
 import edu.mills.heartoftaiwanese.network.WebResultCode
 import kotlinx.coroutines.GlobalScope
@@ -9,15 +10,25 @@ import kotlinx.coroutines.launch
 class HomeViewModel : HomeContract.HomeViewModel {
     private lateinit var view: HomeContract.HomeView
     private lateinit var repository: TranslationRepository
+    private var isConfigured = false
 
     override fun configure(view: HomeContract.HomeView) {
-        this.view = view
-        repository = TranslationRepository()
+        if (!isConfigured) {
+            this.view = view
+            repository = TranslationRepository()
+            isConfigured = true
+        }
     }
 
     override fun fetchChinese(english: String) {
-        // ToDo: Call the Helper class similar to below
-        view.onChineseFetched("河馬")
+        GlobalScope.launch {
+            val result = EnglishToChineseHelper(repository).getChinese(english)
+            if (result.isTaiwanese) throw IllegalStateException("Should get Chinese, but found Taiwanese!")
+            when (result.resultCode) {
+                WebResultCode.RESULT_OK -> result.chinese?.let { view.onChineseFetched(it) }
+                else -> view.onNetworkError(result.resultCode)
+            }
+        }
     }
 
     override fun fetchTaiwanese(chinese: String) {

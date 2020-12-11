@@ -1,6 +1,7 @@
 package edu.mills.heartoftaiwanese.activity.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -114,7 +115,8 @@ class HomeFragment : Fragment(), HomeContract.HomeView {
     }
 
     override fun onChineseFetched(chinese: String) {
-        viewModel.fetchTaiwanese(chinese)
+        binding.result.text = chinese
+//        viewModel.fetchTaiwanese(chinese)
         activity?.runOnUiThread {
             showAfterSubmit()
         }
@@ -128,25 +130,28 @@ class HomeFragment : Fragment(), HomeContract.HomeView {
     }
 
     override fun onNetworkError(error: WebResultCode) {
-        showAfterSubmit()
-        when (error) {
-            WebResultCode.RATE_LIMITED -> Toast.makeText(
-                activity,
-                getText(R.string.too_many_requests),
-                Toast.LENGTH_LONG
-            ).show()
-            WebResultCode.INVALID_NOT_FOUND -> Toast.makeText(
-                activity,
-                getText(R.string.errorNotFound),
-                Toast.LENGTH_LONG
-            ).show()
-            WebResultCode.UNKNOWN_ERROR -> Toast.makeText(
-                activity,
-                getText(R.string.error),
-                Toast.LENGTH_LONG
-            ).show()
-            // Bad state
-            WebResultCode.RESULT_OK -> throw IllegalStateException("Do not call error when there's no error")
+        Log.e("HomeFragment", error.toString())
+        activity?.runOnUiThread {
+            showAfterSubmit()
+            when (error) {
+                WebResultCode.RATE_LIMITED -> Toast.makeText(
+                    activity,
+                    getText(R.string.too_many_requests),
+                    Toast.LENGTH_LONG
+                ).show()
+                WebResultCode.INVALID_NOT_FOUND -> Toast.makeText(
+                    activity,
+                    getText(R.string.errorNotFound),
+                    Toast.LENGTH_LONG
+                ).show()
+                WebResultCode.UNKNOWN_ERROR -> Toast.makeText(
+                    activity,
+                    getText(R.string.error),
+                    Toast.LENGTH_LONG
+                ).show()
+                // Bad state
+                WebResultCode.RESULT_OK -> throw IllegalStateException("Do not call error when there's no error")
+            }
         }
     }
 }

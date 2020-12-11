@@ -1,15 +1,7 @@
 *.iml
 .gradle
 /local.properties
-/.idea/caches
-/.idea/codeStyles
-/.idea/libraries
-/.idea/jarRepositories.xml
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-/.idea/vcs.xml
+/.idea/*
 .DS_Store
 /build
 /captures
@@ -18,3 +10,4 @@
 *~
 /app/src/main/assets/langs/*
 /app/build/outputs/apk/debug/*
+/app/src/main/java/edu/mills/heartoftaiwanese/network/API_KEY.kt

@@ -1,34 +1,23 @@
 package edu.mills.heartoftaiwanese.network
 
-import android.util.Log
-import java.net.HttpURLConnection
-import java.net.URL
+import edu.mills.heartoftaiwanese.data.ChineseResult
 
-class EnglishToChineseHelper {
-    companion object {
-        private const val URL_TO_CRAWL_ENCH =
-            "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=en"
+class EnglishToChineseHelper(
+    private val repository: TranslationRepository
+) {
+    suspend fun getChinese(english: String): ChineseResult {
+        val chineseResult = repository.getChinese(english)
+        return when (chineseResult.resultCode) {
+            WebResultCode.RESULT_OK -> chineseResult.chinese?.let {
+                ChineseResult(WebResultCode.RESULT_OK, parse(it))
+            } ?: ChineseResult(WebResultCode.UNKNOWN_ERROR)
+            else -> chineseResult
+        }
     }
 
-    fun fetchChinese(english: String): String {
-        Log.d("MainActivity", "Fetching Chinese for $english")
-        val url = URL("${URL_TO_CRAWL_ENCH}&dt=t&q=$english")
-        // https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh&dt=t&q=hello
-        val connection = url.openConnection() as HttpURLConnection
-        connection.requestMethod = "GET"
-        connection.setRequestProperty("Accept-Charset", "UTF-8")
-        Log.d("MainActivity", connection.responseCode.toString())
-        if (connection.responseCode == HttpURLConnection.HTTP_OK) {
-            val inputAsString = connection.inputStream.bufferedReader().use { it.readText() }
-            val start = inputAsString.indexOf('"')
-            val stop = inputAsString.indexOf('"', start + 1)
-            return inputAsString.substring(start + 1, stop)
-        } else if (connection.responseCode == 429) {
-            Log.d("MainActivity", "too many HTTP requests")
-            return WebResultCode.RATE_LIMITED.toString()
-        } else {
-            Log.i("MainActivity", connection.responseMessage)
-            return WebResultCode.UNKNOWN_ERROR.toString()
-        }
+    private fun parse(inputAsString: String): String {
+        val start = inputAsString.indexOf('"')
+        val stop = inputAsString.indexOf('"', start + 1)
+        return inputAsString.substring(start + 1, stop)
     }
 }
