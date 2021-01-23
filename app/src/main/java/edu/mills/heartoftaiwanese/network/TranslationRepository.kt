@@ -70,7 +70,10 @@ class TranslationRepository {
         // TODO(developer): Replace these variables before running the sample.
         val projectId = "translation-ench"
         val targetLanguage = "zh-TW"
-        return withContext(Dispatchers.IO) { translateText(projectId, targetLanguage, text) }
+        return withContext(Dispatchers.IO) {
+            TranslateApiBuilder().getTranslation()
+            ""
+        }
     }
 
     // Translating Text
