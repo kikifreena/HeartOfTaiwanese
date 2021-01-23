@@ -25,6 +25,11 @@ android {
         viewBinding = true
     }
 
+    packagingOptions {
+        pickFirst 'META-INF/INDEX.LIST'
+        pickFirst 'META-INF/DEPENDENCIES'
+    }
+
 }
 
 dependencies {
