@@ -59,7 +59,6 @@ class HomeFragment : Fragment(), HomeContract.HomeView {
         viewModel = HomeViewModel()
         viewModel.configure(this)
         initializeClickListeners()
-        // TODO: There is a bug when you expand/close the keyboard, part of the screen disappears
         return binding.root
     }
 

@@ -11,16 +11,12 @@ import edu.mills.heartoftaiwanese.data.TaiwaneseResult
 class ChineseToTaiwaneseHelper(
     private val repository: TranslationRepository
 ) {
-    private val digitsRegex by lazy {
-        Regex("""\d+""")
-    }
-
     suspend fun getTaiwanese(chinese: String): TaiwaneseResult {
         val taiwaneseResult: TaiwaneseResult = repository.getTaiwanese(chinese)
         return when (taiwaneseResult.resultCode) {
             WebResultCode.RESULT_OK -> taiwaneseResult.taiwanese?.let {
                 try {
-                    TaiwaneseResult(WebResultCode.RESULT_OK, parse(it))
+                    TaiwaneseResult(WebResultCode.RESULT_OK, it)
                 } catch (exception: StringIndexOutOfBoundsException) {
                     exception.printStackTrace()
                     TaiwaneseResult(WebResultCode.UNKNOWN_ERROR, "")
@@ -28,25 +24,5 @@ class ChineseToTaiwaneseHelper(
             } ?: TaiwaneseResult(WebResultCode.INVALID_NOT_FOUND, "")
             else -> taiwaneseResult
         }
-    }
-
-    private fun parse(data: String): String {
-        val loc = data.indexOf("台語羅馬字")
-        val loc2 = 1 + data.indexOf(">", data.indexOf("<span", loc))
-        val loc3 = data.indexOf("</span>", loc2)
-        return convertToString(data.substring(loc2, loc3))
-    }
-
-    private fun convertToString(hex: String): String {
-        val split = hex.split("&#|;".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val sb = StringBuilder()
-        for (curr in split) {
-            if (curr.matches(digitsRegex)) {
-                sb.append(Integer.parseInt(curr).toChar())
-            } else {
-                sb.append(curr)
-            }
-        }
-        return sb.toString()
     }
 }
