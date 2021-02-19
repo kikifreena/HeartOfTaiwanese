@@ -9,11 +9,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class TranslateApiBuilder {
+    companion object {
+        private const val TAG = "TranslateApiBuilder"
+    }
+
     private val client: TranslateApi by lazy {
         initRestClient()
     }
-
-    private val TAG = javaClass.simpleName
 
     private fun initRestClient(): TranslateApi {
         val interceptor = HttpLoggingInterceptor()
@@ -33,12 +35,12 @@ class TranslateApiBuilder {
 
     suspend fun getTranslation(stringToTranslate: String): String {
         return withContext(Dispatchers.IO) {
-            val response: List<Any> = client.getTranslation(
-                stringToTranslate = "hello"
+            val response = client.getTranslation(
+                stringToTranslate
             )
-            Log.d("TranslateApiBuilder", "${response.first()}")
+            Log.d(TAG, "${response.first()}")
             val result: String = extractChineseFromResponseList(response.first().toString())
-            Log.d(TAG, result)
+            Log.d(Companion.TAG, result)
             result
         }
     }
@@ -48,7 +50,7 @@ class TranslateApiBuilder {
      * So you need to extract it.
      */
     private fun extractChineseFromResponseList(responseListString: String): String {
-        Log.d(TAG, responseListString)
+        Log.d(Companion.TAG, responseListString)
         val result = responseListString.trim { it == '[' || it == ']' }.trim().split(",")
         return result.first()
     }

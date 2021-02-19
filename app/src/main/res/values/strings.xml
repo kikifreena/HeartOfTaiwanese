@@ -13,7 +13,7 @@
     <string name="menu_favorites">Favorites</string>
     <string name="menu_recent">Recent</string>
     <string name="menu_home">Home</string>
-    <string name="translationFragmentExplanation">Good %1$s! What would you like to translate today?</string>
+    <string name="translationFragmentExplanation">One, two, three. English, Chinese, Taiwanese. Some things just flow effortlessly. So… Good %1$s. What would you like to translate today?</string>
     <string name="translationsTitle">Translations</string>
     <string name="recentFragmentTitle">Recently viewed</string>
     <string name="favoritesFragmentTitle">Favorites</string>

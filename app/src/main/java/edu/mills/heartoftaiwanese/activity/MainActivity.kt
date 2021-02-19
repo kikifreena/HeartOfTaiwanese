@@ -9,9 +9,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import edu.mills.heartoftaiwanese.R
 import edu.mills.heartoftaiwanese.activity.home.HomeFragment
 import edu.mills.heartoftaiwanese.databinding.ActivityMainBinding
-import kotlinx.android.synthetic.main.activity_main.bottomNavigationBar
 
-class MainActivity : AppCompatActivity(),
+class MainActivity :
+    AppCompatActivity(),
     BottomNavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityMainBinding
@@ -69,6 +69,6 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun initializeClickListeners() {
-        bottomNavigationBar.setOnNavigationItemSelectedListener(this)
+        binding.bottomNavigationBar.setOnNavigationItemSelectedListener(this)
     }
 }

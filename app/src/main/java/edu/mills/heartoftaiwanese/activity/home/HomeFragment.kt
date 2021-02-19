@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import edu.mills.heartoftaiwanese.R
+import edu.mills.heartoftaiwanese.activity.hideKeyboard
 import edu.mills.heartoftaiwanese.databinding.FragmentHomeBinding
 import edu.mills.heartoftaiwanese.network.WebResultCode
 import java.util.Calendar
@@ -43,7 +44,8 @@ class HomeFragment : Fragment(), HomeContract.HomeView {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
@@ -100,6 +102,7 @@ class HomeFragment : Fragment(), HomeContract.HomeView {
         binding.submitCh.visibility = View.GONE
         binding.submitEn.visibility = View.INVISIBLE
         binding.clearButton.visibility = View.INVISIBLE
+        hideKeyboard()
     }
 
     private fun showAfterSubmit() {
@@ -114,11 +117,7 @@ class HomeFragment : Fragment(), HomeContract.HomeView {
     }
 
     override fun onChineseFetched(chinese: String) {
-        binding.result.text = chinese
-//        viewModel.fetchTaiwanese(chinese)
-        activity?.runOnUiThread {
-            showAfterSubmit()
-        }
+        viewModel.fetchTaiwanese(chinese)
     }
 
     override fun onTaiwaneseFetched(taiwanese: String) {

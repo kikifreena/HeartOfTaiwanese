@@ -6,7 +6,7 @@ import edu.mills.heartoftaiwanese.data.TaiwaneseResult
 /**
  * Class for requesting network calls and parsing the result.
  * This class does not make network calls. It calls [TranslationRepository] to make the calls.
- * Then it will parse them and send them to the [ViewModel].
+ * Then it will catch the exceptions, if any, and send them to the [ViewModel].
  */
 class ChineseToTaiwaneseHelper(
     private val repository: TranslationRepository

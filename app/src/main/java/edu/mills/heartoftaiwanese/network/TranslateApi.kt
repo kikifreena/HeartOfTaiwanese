@@ -8,10 +8,10 @@ interface TranslateApi {
     suspend fun getTranslation(
         @Query("q") stringToTranslate: String,
         @Query("sl") sourceLanguage: LanguageChoice = LanguageChoice.EN,
-        @Query("tl") destLanguage: LanguageChoice = LanguageChoice.ZH,
+        @Query("tl") destLanguage: LanguageChoice = LanguageChoice.ZH_TW,
         @Query("client") client: String = "gtx",
         @Query("dt") dt: String = "t"
     ): List<Any>
 }
 
-enum class LanguageChoice { EN, ZH }
+enum class LanguageChoice { EN, ZH_TW }

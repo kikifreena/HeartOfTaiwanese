@@ -8,4 +8,3 @@ data class Word(
     fun containsNull() =
         english.isNullOrBlank() || chinese.isNullOrBlank() || taiwanese.isNullOrBlank()
 }
-

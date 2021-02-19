@@ -36,9 +36,12 @@ class TranslationRepository {
                 connection.requestMethod = "POST"
                 connection.setRequestProperty("Accept-Charset", "UTF-8")
                 if (connection.responseCode == HttpURLConnection.HTTP_OK) {
-                    TaiwaneseResult(WebResultCode.RESULT_OK, connection.inputStream.bufferedReader()
-                        // Parse the text after reading it
-                        .use { parse(it.readText()) })
+                    TaiwaneseResult(
+                        WebResultCode.RESULT_OK,
+                        connection.inputStream.bufferedReader()
+                            // Parse the text after reading it
+                            .use { parse(it.readText()) }
+                    )
                         .apply {
                             // Store the cached translation in the short term memory to avoid another network call
                             cachedTranslationsToTaiwanese[chinese] = this
@@ -119,4 +122,3 @@ class TranslationRepository {
         }.toString()
     }
 }
-

@@ -22,8 +22,7 @@ class TranslationDatabaseHelper(context: Context) :
 //                + "IMAGE_RESOURCE_ID INTEGER);");
     }
 
-
-    //private static void insertDrink(SQLiteDatabase db, String name,
+    // private static void insertDrink(SQLiteDatabase db, String name,
     //                                    String description, int resourceId) {
     //        ContentValues drinkValues = new ContentValues();
     //        drinkValues.put("NAME", name);
