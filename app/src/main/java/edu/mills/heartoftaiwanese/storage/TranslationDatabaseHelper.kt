@@ -1,10 +1,10 @@
 package edu.mills.heartoftaiwanese.storage
 
-import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import androidx.core.content.contentValuesOf
 import edu.mills.heartoftaiwanese.data.DatabaseWord
 import edu.mills.heartoftaiwanese.data.Word
 import java.util.Date
@@ -31,64 +31,121 @@ class TranslationDatabaseHelper(context: Context) :
         )
     }
 
-    private fun insertWords(word: Word) {
+    /**
+     * @return true if the operation was successful
+     */
+    fun insertWord(word: Word): Boolean {
         require(!word.containsNull())
-        val translationValues = ContentValues(3).apply {
-            put(tKeyChinese, word.chinese)
-            put(tKeyEnglish, word.english)
-            put(tKeyTaiwanese, word.taiwanese)
+        val translationValues = contentValuesOf(
+            tKeyChinese to word.chinese,
+            tKeyEnglish to word.english,
+            tKeyTaiwanese to word.taiwanese,
+            tKeyFavorite to 0,
+            tKeyAccessTime to currentTime
+        )
+        return writableDatabase.use {
+            it.insert(tTranslations, null, translationValues) != -1L
         }
-        writableDatabase.insert(tTranslations, null, translationValues)
-        writableDatabase.close()
     }
 
     // Gets the 5 most recently added translations, or all if there are 5 or less.
     fun getNewest(): List<DatabaseWord> {
-        return readableDatabase.query(
-            tTranslations, allColumns, null, null, null, null, "$tId DESC", 5.toString()
-        ).let {
-            val wordList = convertToDatabaseWord(it)
-            it.close()
-            readableDatabase.close()
-            wordList
+        return readableDatabase.use { db ->
+            db.query(
+                tTranslations, allColumns, null, null, null, null, "$tId DESC", 5.toString()
+            ).use { convertToDatabaseWord(it) }
         }
     }
 
     // Gets the 5 most recently viewed translations, or all if there are 5 or less.
     fun getRecent(): List<DatabaseWord> {
+        return readableDatabase.use { db ->
+            db.query(
+                tTranslations, allColumns, null, null,
+                null, null, "$tKeyAccessTime DESC", 5.toString()
+            ).use {
+                val wordList = convertToDatabaseWord(it)
+                readableDatabase.close()
+                wordList
+            }
+        }
+    }
+
+    /**
+     * Returns all of the entries in which "favorites" is true.
+     */
+    fun getAllFavorites(): List<DatabaseWord> {
+        return readableDatabase.use { db ->
+            db.query(
+                tTranslations, allColumns, "$tKeyFavorite = ?", arrayOf("1"),
+                null, null, "$tKeyAccessTime DESC"
+            ).use {
+                val wordList = convertToDatabaseWord(it)
+                readableDatabase.close()
+                wordList
+            }
+        }
+    }
+
+    fun getWordByTaiwanese(taiwanese: String): DatabaseWord? {
+        return readableDatabase.use { db ->
+            db.query(
+                tTranslations, allColumns, "$tKeyTaiwanese = ?",
+                arrayOf(taiwanese), null, null, null, 1.toString()
+            ).use { convertToDatabaseWord(it).firstOrNull() }
+        }
+    }
+
+    fun getWordByEnglish(english: String): DatabaseWord? {
+        return readableDatabase.use { db ->
+            db.query(
+                tTranslations,
+                allColumns,
+                "$tKeyEnglish = ?",
+                arrayOf(english),
+                null,
+                null,
+                null,
+                1.toString()
+            ).use { convertToDatabaseWord(it).firstOrNull() }
+        }
+    }
+
+    fun getWordByChinese(chinese: String): DatabaseWord? {
         return readableDatabase.query(
-            tTranslations, allColumns, null, null, null, null, "$tKeyAccessTime DESC", 5.toString()
-        ).let {
-            val wordList = convertToDatabaseWord(it)
-            it.close()
+            tTranslations, allColumns, "$tKeyChinese = ?",
+            arrayOf(chinese), null, null, null, 1.toString()
+        ).use {
+            val wordList = convertToDatabaseWord(it).firstOrNull()
             readableDatabase.close()
             wordList
         }
     }
 
-    fun getAllFavorites(): List<DatabaseWord> {
-        TODO("Not yet implemented")
-    }
-
-    fun getWordByTaiwanese(): DatabaseWord {
-        TODO("Not yet implemented")
-    }
-
-    fun getWordByChinese(chinese: String): DatabaseWord {
-        TODO("Not yet implemented")
-    }
-
-    fun getWordById(id: String): DatabaseWord {
-        TODO("Not yet implemented")
+    fun getWordById(id: String): DatabaseWord? {
+        return readableDatabase.use { db ->
+            db.query(
+                tTranslations, allColumns,
+                "$tId = ?", arrayOf(id), null, null, null, 1.toString()
+            ).use {
+                convertToDatabaseWord(it).firstOrNull()
+            }
+        }
     }
 
     /**
      * Update the last accessed time for an entry in the database.
      *
      * @param wordId the ID of the database entry.
+     * @return true if the operation was successful and exactly one row was updated.
      */
-    fun updateLastAccessTime(wordId: Int) {
-        TODO("Not yet implemented")
+    fun updateLastAccessTime(wordId: Int): Boolean {
+        return readableDatabase.use { db ->
+            db.update(
+                tTranslations, contentValuesOf(tKeyAccessTime to currentTime),
+                "$tId = ?", arrayOf(wordId.toString())
+            ) == 1
+        }
     }
 
     private fun convertToDatabaseWord(cursor: Cursor): List<DatabaseWord> {
@@ -109,6 +166,9 @@ class TranslationDatabaseHelper(context: Context) :
             }
         }
     }
+
+    private val currentTime: String
+        get() = Date().time.toString()
 
     companion object {
         private const val DB_NAME = "translator"
