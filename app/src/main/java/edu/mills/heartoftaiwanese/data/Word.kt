@@ -7,4 +7,10 @@ data class Word(
 ) {
     fun containsNull() =
         english.isNullOrBlank() || chinese.isNullOrBlank() || taiwanese.isNullOrBlank()
+
+    /**
+     * Function to check if the data object is useless
+     */
+    fun isAllNull() =
+        english.isNullOrBlank() && chinese.isNullOrBlank() && taiwanese.isNullOrBlank()
 }

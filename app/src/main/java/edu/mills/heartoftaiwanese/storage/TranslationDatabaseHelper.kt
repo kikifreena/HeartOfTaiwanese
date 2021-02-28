@@ -32,6 +32,7 @@ class TranslationDatabaseHelper(context: Context) :
     }
 
     /**
+     * @param word a fully filled out Word. None of the parameters should be null.
      * @return true if the operation was successful
      */
     fun insertWord(word: Word): Boolean {
@@ -48,7 +49,10 @@ class TranslationDatabaseHelper(context: Context) :
         }
     }
 
-    // Gets the 5 most recently added translations, or all if there are 5 or less.
+    /**
+     * Gets the 5 most recently added translations, or all if there are 5 or less.
+     * @return a list of the newest (most recently added) words
+     */
     fun getNewest(): List<DatabaseWord> {
         return readableDatabase.use { db ->
             db.query(
@@ -72,7 +76,7 @@ class TranslationDatabaseHelper(context: Context) :
     }
 
     /**
-     * Returns all of the entries in which "favorites" is true.
+     * @return all of the entries in which "favorites" is true.
      */
     fun getAllFavorites(): List<DatabaseWord> {
         return readableDatabase.use { db ->

@@ -33,13 +33,29 @@ class TranslateApiBuilder {
         return retrofit.create(TranslateApi::class.java)
     }
 
-    suspend fun getTranslation(stringToTranslate: String): String {
+    suspend fun getChineseTranslation(stringToTranslate: String): String {
         return withContext(Dispatchers.IO) {
             val response = client.getTranslation(
-                stringToTranslate
+                stringToTranslate = stringToTranslate,
+                sourceLanguage = LanguageChoice.EN,
+                destLanguage = LanguageChoice.ZH_TW
             )
             Log.d(TAG, "${response.first()}")
-            val result: String = extractChineseFromResponseList(response.first().toString())
+            val result: String = extractResultFromResponseList(response.first().toString())
+            Log.d(Companion.TAG, result)
+            result
+        }
+    }
+
+    suspend fun getEnglishTranslation(stringToTranslate: String): String {
+        return withContext(Dispatchers.IO) {
+            val response = client.getTranslation(
+                stringToTranslate = stringToTranslate,
+                sourceLanguage = LanguageChoice.ZH_TW,
+                destLanguage = LanguageChoice.EN
+            )
+            Log.d(TAG, "${response.first()}")
+            val result: String = extractResultFromResponseList(response.first().toString())
             Log.d(Companion.TAG, result)
             result
         }
@@ -49,9 +65,10 @@ class TranslateApiBuilder {
      * Response.first() will get you something like this: [[你好, hello, null, null, 10.0]]
      * So you need to extract it.
      */
-    private fun extractChineseFromResponseList(responseListString: String): String {
+    private fun extractResultFromResponseList(responseListString: String): String {
         Log.d(Companion.TAG, responseListString)
-        val result = responseListString.trim { it == '[' || it == ']' }.trim().split(",")
-        return result.first()
+        return responseListString.trim { it == '[' || it == ']' }.trim()
+            .split(",")
+            .first()
     }
 }
