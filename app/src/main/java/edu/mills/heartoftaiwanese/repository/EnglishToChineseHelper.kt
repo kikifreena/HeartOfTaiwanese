@@ -1,6 +1,7 @@
-package edu.mills.heartoftaiwanese.network
+package edu.mills.heartoftaiwanese.repository
 
 import edu.mills.heartoftaiwanese.data.ChineseResult
+import edu.mills.heartoftaiwanese.network.WebResultCode
 
 class EnglishToChineseHelper(
     private val repository: TranslationRepository

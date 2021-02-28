@@ -1,4 +1,4 @@
-package edu.mills.heartoftaiwanese.network
+package edu.mills.heartoftaiwanese.repository
 
 import android.content.Context
 import android.util.Log
@@ -6,12 +6,13 @@ import edu.mills.heartoftaiwanese.data.ChineseResult
 import edu.mills.heartoftaiwanese.data.DatabaseWord
 import edu.mills.heartoftaiwanese.data.TaiwaneseResult
 import edu.mills.heartoftaiwanese.data.Word
+import edu.mills.heartoftaiwanese.network.TaiwaneseApi
+import edu.mills.heartoftaiwanese.network.TranslateApiBuilder
+import edu.mills.heartoftaiwanese.network.WebResultCode
 import edu.mills.heartoftaiwanese.storage.TranslationDatabaseHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
 
 /**
  * A class for making network calls only.
@@ -20,16 +21,12 @@ class TranslationRepository(private val context: Context) {
     companion object {
         private const val TAG = "TranslationRepository"
         private const val URL_TO_CRAWL_TW = "http://210.240.194.97/q/THq.asp?w="
-        private val digitsRegex by lazy {
-            Regex("""\d+""")
-        }
     }
 
     private val cachedTranslationsToChinese = mutableMapOf<String, ChineseResult>()
     private val cachedTranslationsToTaiwanese = mutableMapOf<String, TaiwaneseResult>()
-    private val translationDatabaseHelper by lazy {
-        TranslationDatabaseHelper(context)
-    }
+    private val translationDatabaseHelper by lazy { TranslationDatabaseHelper(context) }
+    private val taiwaneseApi by lazy { TaiwaneseApi() }
 
     suspend fun getTaiwanese(chinese: String): TaiwaneseResult {
         return withContext(Dispatchers.IO) {
@@ -39,23 +36,11 @@ class TranslationRepository(private val context: Context) {
                 possibleTaiwaneseResult == null ||
                 possibleTaiwaneseResult.resultCode != WebResultCode.RESULT_OK
             ) {
-                val url = URL("${URL_TO_CRAWL_TW}$chinese")
-                val connection = url.openConnection() as HttpURLConnection
-                connection.requestMethod = "POST"
-                connection.setRequestProperty("Accept-Charset", "UTF-8")
-                if (connection.responseCode == HttpURLConnection.HTTP_OK) {
-                    TaiwaneseResult(
-                        WebResultCode.RESULT_OK,
-                        connection.inputStream.bufferedReader()
-                            // Parse the text after reading it
-                            .use { parse(it.readText()) }
-                    )
-                        .apply {
-                            // Store the cached translation in the short term memory to avoid another network call
-                            cachedTranslationsToTaiwanese[chinese] = this
-                        }
-                } else {
-                    TaiwaneseResult(WebResultCode.INVALID_NOT_FOUND)
+                taiwaneseApi.getTaiwanese(chinese).let {
+                    if (it.resultCode == WebResultCode.RESULT_OK) {
+                        cachedTranslationsToTaiwanese[chinese] = it
+                    }
+                    it
                 }
             } else {
                 possibleTaiwaneseResult
@@ -156,41 +141,5 @@ class TranslationRepository(private val context: Context) {
             } else throw IllegalArgumentException("A blank word is being attempted. Do not call this method for a blank word.")
         }
 
-    }
-
-    /**
-     * Do NOT modify this function unless you know what you're doing (I don't).
-     * Used for parsing the response when getting Taiwanese.
-     * @see convertToString
-     *
-     * TODO this code is unreadable, fix it
-     */
-    private fun parse(data: String): String {
-        val loc = data.indexOf("台語羅馬字")
-        val loc2 = 1 + data.indexOf(">", data.indexOf("<span", loc))
-        val loc3 = data.indexOf("</span>", loc2)
-        return convertToString(data.substring(loc2, loc3))
-    }
-
-    /**
-     * Do NOT modify this function unless you know what you're doing (I don't).
-     *
-     * The Taiwanese gets returned as some hexadecimal string-like combination that is not human readable.
-     * This function turns the string back into a human-readable string.
-     *
-     * @param hex the hexadecimal string representation to be converted
-     */
-    private fun convertToString(hex: String): String {
-        val split = hex.split("&#|;".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        return StringBuilder().apply {
-            for (curr in split) {
-                if (curr.matches(digitsRegex)) {
-                    // Get the int value of the hex, then convert it to string
-                    append(Integer.parseInt(curr).toChar())
-                } else {
-                    append(curr)
-                }
-            }
-        }.toString()
     }
 }

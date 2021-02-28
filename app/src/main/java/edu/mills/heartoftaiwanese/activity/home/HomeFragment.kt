@@ -59,7 +59,7 @@ class HomeFragment : Fragment(), HomeContract.HomeView {
             isMorningAfternoonEvening(currentHour)
         )
         viewModel = HomeViewModel()
-        viewModel.configure(this)
+        viewModel.configure(this, requireActivity().applicationContext)
         initializeClickListeners()
         return binding.root
     }

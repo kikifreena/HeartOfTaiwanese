@@ -1,7 +1,8 @@
-package edu.mills.heartoftaiwanese.network
+package edu.mills.heartoftaiwanese.repository
 
 import androidx.lifecycle.ViewModel
 import edu.mills.heartoftaiwanese.data.TaiwaneseResult
+import edu.mills.heartoftaiwanese.network.WebResultCode
 
 /**
  * Class for requesting network calls and parsing the result.

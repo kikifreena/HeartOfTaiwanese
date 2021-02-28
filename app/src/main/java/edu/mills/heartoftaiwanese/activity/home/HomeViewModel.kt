@@ -1,9 +1,10 @@
 package edu.mills.heartoftaiwanese.activity.home
 
-import edu.mills.heartoftaiwanese.network.ChineseToTaiwaneseHelper
-import edu.mills.heartoftaiwanese.network.EnglishToChineseHelper
-import edu.mills.heartoftaiwanese.network.TranslationRepository
+import android.content.Context
 import edu.mills.heartoftaiwanese.network.WebResultCode
+import edu.mills.heartoftaiwanese.repository.ChineseToTaiwaneseHelper
+import edu.mills.heartoftaiwanese.repository.EnglishToChineseHelper
+import edu.mills.heartoftaiwanese.repository.TranslationRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -12,10 +13,10 @@ class HomeViewModel : HomeContract.HomeViewModel {
     private lateinit var repository: TranslationRepository
     private var isConfigured = false
 
-    override fun configure(view: HomeContract.HomeView) {
+    override fun configure(view: HomeContract.HomeView, context: Context) {
         if (!isConfigured) {
             this.view = view
-            repository = TranslationRepository()
+            repository = TranslationRepository(context)
             isConfigured = true
         }
     }
