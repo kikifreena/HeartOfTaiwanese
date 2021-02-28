@@ -7,7 +7,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import edu.mills.heartoftaiwanese.R
+import edu.mills.heartoftaiwanese.activity.favorites.FavoritesFragment
 import edu.mills.heartoftaiwanese.activity.home.HomeFragment
+import edu.mills.heartoftaiwanese.activity.recent.RecentFragment
 import edu.mills.heartoftaiwanese.databinding.ActivityMainBinding
 
 class MainActivity :

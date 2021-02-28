@@ -1,4 +1,4 @@
-package edu.mills.heartoftaiwanese.activity
+package edu.mills.heartoftaiwanese.activity.recent
 
 import android.os.Bundle
 import android.view.LayoutInflater
