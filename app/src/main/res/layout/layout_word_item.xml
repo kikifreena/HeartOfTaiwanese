@@ -15,7 +15,7 @@
         android:layout_marginEnd="@dimen/element_vertical_margin"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@id/tvLeftText"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/favoriteSelector"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Header text" />
@@ -26,7 +26,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/element_vertical_margin"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
         android:contentDescription="@string/menu_favorites"
+        android:focusable="true"
         android:src="@drawable/ic_baseline_favorites_24"
         app:layout_constraintBottom_toTopOf="@id/tvLeftText"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,7 +46,7 @@
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvWordTitle"
-        tools:text="Sample where there are so many lines" />
+        tools:text="English" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -65,7 +67,7 @@
         app:layout_constraintEnd_toStartOf="@id/tvRightText"
         app:layout_constraintStart_toEndOf="@id/tvLeftText"
         app:layout_constraintTop_toBottomOf="@id/tvWordTitle"
-        tools:text="Example" />
+        tools:text="Chinese" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -86,7 +88,7 @@
         app:layout_constraintEnd_toStartOf="@id/favoriteSelector"
         app:layout_constraintStart_toEndOf="@id/tvCenterText"
         app:layout_constraintTop_toBottomOf="@id/tvWordTitle"
-        tools:text="English" />
+        tools:text="Tw" />
 
     <TextView
         android:id="@+id/tvLastAccessed"
