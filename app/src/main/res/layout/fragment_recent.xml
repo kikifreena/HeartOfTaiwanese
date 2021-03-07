@@ -11,22 +11,23 @@
         style="@style/Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/element_vertical_margin"
         android:text="@string/recentFragmentTitle"
         app:itemIconTint="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@id/recyclerViewRecent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewRecent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/element_vertical_margin"
-        android:layout_marginBottom="@dimen/element_vertical_margin"
-        android:visibility="gone"
+        android:layout_height="0dp"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recentFragmentTitle"
-        tools:listitem="@tools:sample/cities" />
+        app:layout_constraintTop_toBottomOf="@id/recentFragmentTitle" />
 
     <TextView
         android:layout_width="match_parent"
@@ -36,5 +37,6 @@
         android:text="@string/recentlyViewedNone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recentFragmentTitle" />
+        app:layout_constraintTop_toBottomOf="@id/recentFragmentTitle"
+        tools:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

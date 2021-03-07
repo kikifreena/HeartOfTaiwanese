@@ -4,7 +4,6 @@ import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import edu.mills.heartoftaiwanese.R
@@ -16,11 +15,19 @@ import java.text.DateFormat
 class WordListAdapter :
     ListAdapter<DatabaseWord, WordListAdapter.WordListViewHolder>(WordsCallback) {
 
+    var favoriteButtonListener: FavoriteButtonListener? = null
+
     interface FavoriteButtonListener {
-        fun onFavoriteClicked()
+        /**
+         * Interface function that determines what can happen if the favorite is clicked.
+         * The view adapter takes care of hiding/showing the favorite button.
+         *
+         * @return the new value of the favorite
+         */
+        fun onFavoriteClicked(word: DatabaseWord): Boolean
     }
 
-    class WordListViewHolder(private val binding: LayoutWordItemBinding) :
+    inner class WordListViewHolder(private val binding: LayoutWordItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         private val dateFormat = DateFormat.getDateInstance(DateFormat.LONG)
@@ -31,7 +38,7 @@ class WordListAdapter :
                 if (value) {
                     // Display the favorite button as colorPrimary
                     binding.favoriteSelector.imageTintList = ColorStateList.valueOf(
-                        binding.root.context.resources.getColor(R.color.colorPrimary, null)
+                        binding.root.resources.getColor(R.color.colorPrimary, null)
                     )
                 } else {
                     // Unfavorite; clear the favorite button.
@@ -44,7 +51,9 @@ class WordListAdapter :
             isFavorite = databaseWord.favorite
             binding.tvLastAccessed.text = dateFormat.format(databaseWord.accessTime)
             binding.favoriteSelector.setOnClickListener {
-
+                favoriteButtonListener?.let {
+                    isFavorite = it.onFavoriteClicked(databaseWord)
+                }
             }
         }
 
@@ -109,16 +118,5 @@ class WordListAdapter :
      */
     override fun onBindViewHolder(holder: WordListViewHolder, position: Int) {
         holder.bind(getItem(position))
-    }
-}
-
-object WordsCallback : DiffUtil.ItemCallback<DatabaseWord>() {
-    override fun areItemsTheSame(oldWord: DatabaseWord, newWord: DatabaseWord): Boolean {
-        // User properties may have changed if reloaded from the DB, but ID is fixed
-        return oldWord.id == newWord.id
-    }
-
-    override fun areContentsTheSame(oldWord: DatabaseWord, newWord: DatabaseWord): Boolean {
-        return oldWord == newWord
     }
 }
