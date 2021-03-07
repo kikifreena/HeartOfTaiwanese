@@ -34,6 +34,7 @@ class RecentFragment : Fragment(), RecentContract.RecentView,
             favoriteButtonListener = this@RecentFragment
         }
         recyclerView.adapter = adapter
+        viewModel.getUpdatedWordList()
     }
 
     /**
@@ -44,7 +45,7 @@ class RecentFragment : Fragment(), RecentContract.RecentView,
      */
     override fun onFavoriteClicked(word: DatabaseWord): Boolean {
         viewModel.favoriteWord(word)
-        TODO("Not yet implemented")
+        return word.favorite
     }
 
     override fun onWordListChanged(newWordList: List<DatabaseWord>) {

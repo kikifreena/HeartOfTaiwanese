@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tvWordTitle"
@@ -22,8 +22,8 @@
 
     <ImageView
         android:id="@+id/favoriteSelector"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_margin="@dimen/element_vertical_margin"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
@@ -105,4 +105,12 @@
         app:layout_constraintTop_toBottomOf="@id/tvLeftText"
         tools:text="March 01, 2021" />
 
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginTop="@dimen/element_vertical_margin"
+        android:background="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvLastAccessed" />
 </androidx.constraintlayout.widget.ConstraintLayout>

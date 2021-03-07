@@ -38,11 +38,13 @@ class WordListAdapter :
                 if (value) {
                     // Display the favorite button as colorPrimary
                     binding.favoriteSelector.imageTintList = ColorStateList.valueOf(
-                        binding.root.resources.getColor(R.color.colorPrimary, null)
+                        binding.root.resources.getColor(R.color.colorPrimaryDark, null)
                     )
                 } else {
                     // Unfavorite; clear the favorite button.
-                    binding.favoriteSelector.imageTintList = null
+                    binding.favoriteSelector.imageTintList = ColorStateList.valueOf(
+                        binding.root.resources.getColor(R.color.colorPrimary, null)
+                    )
                 }
             }
 
