@@ -20,14 +20,14 @@ class TranslationDatabaseHelper(context: Context) :
      */
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
-            "CREATE TABLE $tTranslations ("
-                    + "$tId INTEGER PRIMARY KEY AUTOINCREMENT, "
-                    + "$tKeyAccessTime INTEGER"
-                    + "$tKeyChinese TEXT, "
-                    + "$tKeyEnglish TEXT, "
-                    + "$tKeyTaiwanese TEXT, "
+            "CREATE TABLE $tTranslations (" +
+                    "$tId INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "$tKeyAccessTime INTEGER" +
+                    "$tKeyChinese TEXT, " +
+                    "$tKeyEnglish TEXT, " +
+                    "$tKeyTaiwanese TEXT, " +
                     // boolean, 0 for not favorite, 1 for favorite
-                    + "$tKeyFavorite INTEGER);"
+                    "$tKeyFavorite INTEGER);"
         )
     }
 
@@ -191,7 +191,6 @@ class TranslationDatabaseHelper(context: Context) :
 
         private val allColumns =
             arrayOf(tKeyEnglish, tKeyTaiwanese, tKeyChinese, tKeyFavorite, tKeyAccessTime)
-
     }
 
     /**

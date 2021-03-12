@@ -176,6 +176,5 @@ class TranslationRepository(private val context: Context) {
                 }
             } else throw IllegalArgumentException("A blank word is being attempted. Do not call this method for a blank word.")
         }
-
     }
 }
