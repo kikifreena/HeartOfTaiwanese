@@ -30,20 +30,22 @@ class TranslationRepository(private val context: Context) {
 
     suspend fun getTaiwanese(chinese: String): TaiwaneseResult {
         return withContext(Dispatchers.IO) {
-            val possibleTaiwaneseResult: TaiwaneseResult? = cachedTranslationsToTaiwanese[chinese]
             // Get from the cache if possible...
-            if (!cachedTranslationsToTaiwanese.containsKey(chinese) ||
-                possibleTaiwaneseResult == null ||
-                possibleTaiwaneseResult.resultCode != WebResultCode.RESULT_OK
-            ) {
-                taiwaneseApi.getTaiwanese(chinese).let {
-                    if (it.resultCode == WebResultCode.RESULT_OK) {
-                        cachedTranslationsToTaiwanese[chinese] = it
-                    }
-                    it
-                }
-            } else {
+            val possibleTaiwaneseResult: TaiwaneseResult? = cachedTranslationsToTaiwanese[chinese]
+            if (possibleTaiwaneseResult?.resultCode == WebResultCode.RESULT_OK) {
                 possibleTaiwaneseResult
+            }
+            // The cache didn't work, get from database
+            else {
+                getWordFromDatabase(Word(chinese = chinese))?.toTaiwaneseResult()
+                    ?.let { databaseResult ->
+                        if (databaseResult.resultCode == WebResultCode.RESULT_OK) {
+                            databaseResult
+                        } else {
+                            getTaiwaneseFromNetwork(chinese)
+                        }
+                        // The database didn't work, get from network
+                    } ?: getTaiwaneseFromNetwork(chinese)
             }
         }
     }
@@ -52,35 +54,55 @@ class TranslationRepository(private val context: Context) {
         return withContext(Dispatchers.IO) {
             val possibleChineseResult = cachedTranslationsToChinese[english]
             // Get from the cache if possible...
-            if (!cachedTranslationsToChinese.containsKey(english) ||
-                possibleChineseResult == null ||
-                possibleChineseResult.resultCode != WebResultCode.RESULT_OK
-            ) {
-                Log.d("MainActivity", "Fetching Chinese for $english")
-                translateTextToChinese(english)?.let {
-                    ChineseResult(WebResultCode.RESULT_OK, it).apply {
-                        cachedTranslationsToChinese[english] = this
-                    }
-                } ?: ChineseResult(WebResultCode.UNKNOWN_ERROR)
-            } else {
+            if (possibleChineseResult?.resultCode == WebResultCode.RESULT_OK) {
                 possibleChineseResult
+            }
+            // cache did not work, use database or network
+            else {
+                getWordFromDatabase(Word(english = english))?.toChineseResult()
+                    ?.let { databaseResult ->
+                        if (databaseResult.resultCode == WebResultCode.RESULT_OK) {
+                            databaseResult
+                        } else {
+                            translateTextToChinese(english)
+                        }
+                    } ?: translateTextToChinese(english)
             }
         }
     }
 
-    @Throws(IOException::class)
-    private suspend fun translateTextToChinese(text: String): String? {
+    suspend fun getFavorites(): List<DatabaseWord> {
         return withContext(Dispatchers.IO) {
-            try {
-                TranslateApiBuilder().getChineseTranslation(text)
-            } catch (exception: Exception) {
-                null // Just let it be null... it is caught later anyway
-            }
+            translationDatabaseHelper.getAllFavorites()
         }
+    }
+
+    suspend fun getRecent(): List<DatabaseWord> {
+        return withContext(Dispatchers.IO) {
+            translationDatabaseHelper.getRecent()
+        }
+    }
+
+    @Throws(IOException::class)
+    private suspend fun translateTextToChinese(text: String): ChineseResult {
+        Log.d(TAG, "translate text to chinese")
+        return try {
+            TranslateApiBuilder().getChineseTranslation(text)
+        } catch (e: Exception) {
+            null
+        }?.let {
+            ChineseResult(WebResultCode.RESULT_OK, it).apply {
+                // success: Store in cache
+                cachedTranslationsToChinese[text] = this
+                // Success: Store in database
+//                storeWordInDatabase(Word(english = text, chinese = this.chinese))
+            }
+        } ?: ChineseResult(WebResultCode.UNKNOWN_ERROR)
     }
 
     @Throws(IOException::class)
     private suspend fun translateTextToEnglish(chinese: String): String? {
+        Log.d(TAG, "translate text to English")
         return withContext(Dispatchers.IO) {
             try {
                 TranslateApiBuilder().getEnglishTranslation(chinese)
@@ -90,7 +112,20 @@ class TranslationRepository(private val context: Context) {
         }
     }
 
+    private suspend fun getTaiwaneseFromNetwork(chinese: String): TaiwaneseResult {
+        Log.d(TAG, "Getting taiwanese from network!")
+        return taiwaneseApi.getTaiwanese(chinese).let { result ->
+            if (result.resultCode == WebResultCode.RESULT_OK) {
+                cachedTranslationsToTaiwanese[chinese] = result
+                // Store in database too
+                storeWordInDatabase(Word(chinese = chinese, taiwanese = result.taiwanese))
+            }
+            result
+        }
+    }
+
     private suspend fun storeWordInDatabase(word: Word) {
+        Log.d(TAG, "Storing in database...")
         require(!word.taiwanese.isNullOrBlank() && !word.chinese.isNullOrBlank())
         withContext(Dispatchers.IO) {
             var wordToInsert = word // Default to the original word
@@ -121,6 +156,7 @@ class TranslationRepository(private val context: Context) {
      * @return a DatabaseWord or null if no word matching the parameters was found.
      */
     private suspend fun getWordFromDatabase(word: Word): DatabaseWord? {
+        Log.d(TAG, "Checking the database...")
         return withContext(Dispatchers.IO) {
             if (!word.isAllNull()) { // you can't insert a blank word lol
                 when {

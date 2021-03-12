@@ -1,24 +1,20 @@
 package edu.mills.heartoftaiwanese.activity.home
 
 import android.content.Context
+import edu.mills.heartoftaiwanese.activity.BaseFragment
+import edu.mills.heartoftaiwanese.activity.BaseViewModel
 import edu.mills.heartoftaiwanese.network.WebResultCode
 import edu.mills.heartoftaiwanese.repository.ChineseToTaiwaneseHelper
 import edu.mills.heartoftaiwanese.repository.EnglishToChineseHelper
-import edu.mills.heartoftaiwanese.repository.TranslationRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class HomeViewModel : HomeContract.HomeViewModel {
+class HomeViewModel : HomeContract.HomeViewModel, BaseViewModel() {
     private lateinit var view: HomeContract.HomeView
-    private lateinit var repository: TranslationRepository
-    private var isConfigured = false
 
-    override fun configure(view: HomeContract.HomeView, context: Context) {
-        if (!isConfigured) {
-            this.view = view
-            repository = TranslationRepository(context)
-            isConfigured = true
-        }
+    override fun configure(view: BaseFragment, context: Context) {
+        super.configure(view, context)
+        this.view = view as HomeContract.HomeView
     }
 
     override fun fetchChinese(english: String) {

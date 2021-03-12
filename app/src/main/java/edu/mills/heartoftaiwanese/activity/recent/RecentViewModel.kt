@@ -1,16 +1,19 @@
 package edu.mills.heartoftaiwanese.activity.recent
 
 import android.content.Context
+import edu.mills.heartoftaiwanese.activity.BaseFragment
+import edu.mills.heartoftaiwanese.activity.BaseViewModel
 import edu.mills.heartoftaiwanese.data.DatabaseWord
-import edu.mills.heartoftaiwanese.data.Word
-import java.util.Date
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-class RecentViewModel : RecentContract.RecentViewModel {
+class RecentViewModel : RecentContract.RecentViewModel, BaseViewModel() {
     private lateinit var view: RecentContract.RecentView
 
-    override fun configure(view: RecentContract.RecentView, context: Context) {
-        this.view = view
-        view.onConfigurationSuccess()
+    override fun configure(view: BaseFragment, context: Context) {
+        super.configure(view, context)
+        this.view = view as RecentContract.RecentView
+        this.view.onConfigurationSuccess()
     }
 
     /**
@@ -20,12 +23,14 @@ class RecentViewModel : RecentContract.RecentViewModel {
 
     }
 
+
     override fun getUpdatedWordList(): Boolean {
-        val testList = listOf(
-            DatabaseWord(Word("aa", "bb", "FAKE data"), 1, false, Date()),
-            DatabaseWord(Word("a", "b", "Fake fake fake"), 2, false, Date())
-        )
-        view.onWordListChanged(testList)
-        return true
+        var returnValue = false
+        GlobalScope.launch {
+            val recentList = repository.getRecent()
+            returnValue = recentList.isNotEmpty()
+            view.onWordListChanged(recentList)
+        }
+        return returnValue
     }
 }

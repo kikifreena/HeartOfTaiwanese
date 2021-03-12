@@ -1,6 +1,5 @@
 package edu.mills.heartoftaiwanese.activity.recent
 
-import android.content.Context
 import edu.mills.heartoftaiwanese.data.DatabaseWord
 
 interface RecentContract {
@@ -10,8 +9,11 @@ interface RecentContract {
     }
 
     interface RecentViewModel {
-        fun configure(view: RecentView, context: Context)
         fun favoriteWord(word: DatabaseWord)
+
+        /**
+         * Get the updated word list. Return true if there are more than 0 words, false if there are none.
+         */
         fun getUpdatedWordList(): Boolean
     }
 }

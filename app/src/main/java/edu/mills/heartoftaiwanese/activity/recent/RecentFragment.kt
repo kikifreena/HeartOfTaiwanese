@@ -4,16 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import edu.mills.heartoftaiwanese.activity.BaseFragment
 import edu.mills.heartoftaiwanese.activity.adapter.WordListAdapter
 import edu.mills.heartoftaiwanese.data.DatabaseWord
 import edu.mills.heartoftaiwanese.databinding.FragmentRecentBinding
 
-class RecentFragment : Fragment(), RecentContract.RecentView,
+class RecentFragment : BaseFragment(), RecentContract.RecentView,
     WordListAdapter.FavoriteButtonListener {
     private lateinit var binding: FragmentRecentBinding
-    private lateinit var viewModel: RecentContract.RecentViewModel
+    private lateinit var viewModel: RecentViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: WordListAdapter
 

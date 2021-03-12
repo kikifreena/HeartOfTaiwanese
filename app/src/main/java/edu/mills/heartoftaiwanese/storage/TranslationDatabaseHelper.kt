@@ -176,7 +176,7 @@ class TranslationDatabaseHelper(context: Context) :
 
     companion object {
         private const val DB_NAME = "translator"
-        private const val DB_VERSION = 0
+        private const val DB_VERSION = 1
 
         // table
         private const val tTranslations = "TRANSLATIONS"
@@ -190,7 +190,7 @@ class TranslationDatabaseHelper(context: Context) :
         private const val tKeyAccessTime = "LAST_ACCESSED"
 
         private val allColumns =
-            arrayOf(tKeyChinese, tKeyEnglish, tKeyTaiwanese, tKeyFavorite, tKeyAccessTime)
+            arrayOf(tKeyEnglish, tKeyTaiwanese, tKeyChinese, tKeyFavorite, tKeyAccessTime)
 
     }
 

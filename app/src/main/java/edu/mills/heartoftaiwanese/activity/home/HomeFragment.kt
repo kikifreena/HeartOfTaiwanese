@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import edu.mills.heartoftaiwanese.R
+import edu.mills.heartoftaiwanese.activity.BaseFragment
 import edu.mills.heartoftaiwanese.activity.hideKeyboard
 import edu.mills.heartoftaiwanese.databinding.FragmentHomeBinding
 import edu.mills.heartoftaiwanese.network.WebResultCode
@@ -18,7 +19,7 @@ import java.util.Calendar
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment(), HomeContract.HomeView {
+class HomeFragment : HomeContract.HomeView, BaseFragment() {
     companion object {
         private const val kSavedChineseText = "SavedChineseText"
         private const val kSavedEnglishText = "SavedEnglishText"
@@ -35,7 +36,7 @@ class HomeFragment : Fragment(), HomeContract.HomeView {
     }
 
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var viewModel: HomeContract.HomeViewModel
+    private lateinit var viewModel: HomeViewModel
 
     override fun onSaveInstanceState(state: Bundle) {
         super.onSaveInstanceState(state)
