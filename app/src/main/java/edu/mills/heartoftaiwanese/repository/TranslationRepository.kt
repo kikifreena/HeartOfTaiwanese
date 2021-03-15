@@ -72,12 +72,14 @@ class TranslationRepository(private val context: Context) {
     }
 
     suspend fun getFavorites(): List<DatabaseWord> {
+        Log.d(TAG, "Getting Favorites")
         return withContext(Dispatchers.IO) {
             translationDatabaseHelper.getAllFavorites()
         }
     }
 
     suspend fun getRecent(): List<DatabaseWord> {
+        Log.d(TAG, "Getting recent")
         return withContext(Dispatchers.IO) {
             translationDatabaseHelper.getRecent()
         }
@@ -138,8 +140,11 @@ class TranslationRepository(private val context: Context) {
                     // Update the word to insert.
                     wordToInsert =
                         Word(english = english, chinese = word.chinese, taiwanese = word.taiwanese)
-                } ?: Log.e(TAG, "English translation failed... skipping database storage")
-                return@withContext
+                    Log.i(TAG, "Will insert word: $wordToInsert")
+                } ?: run {
+                    Log.e(TAG, "English translation failed... skipping database storage")
+                    return@withContext
+                }
             }
             val isSuccessful = translationDatabaseHelper.insertWord(wordToInsert)
             if (!isSuccessful) {

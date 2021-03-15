@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import androidx.core.content.contentValuesOf
 import edu.mills.heartoftaiwanese.data.DatabaseWord
 import edu.mills.heartoftaiwanese.data.Word
@@ -36,6 +37,7 @@ class TranslationDatabaseHelper(context: Context) :
      * @return true if the operation was successful
      */
     fun insertWord(word: Word): Boolean {
+        Log.d(TAG, "The word to insert: $word")
         require(!word.containsNull())
         val translationValues = contentValuesOf(
             tKeyChinese to word.chinese,
@@ -175,6 +177,7 @@ class TranslationDatabaseHelper(context: Context) :
         get() = Date().time.toString()
 
     companion object {
+        private const val TAG = "TranslationDatabaseHelper"
         private const val DB_NAME = "translator"
         private const val DB_VERSION = 1
 
