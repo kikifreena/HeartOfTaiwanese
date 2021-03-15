@@ -144,6 +144,8 @@ class TranslationRepository(private val context: Context) {
             val isSuccessful = translationDatabaseHelper.insertWord(wordToInsert)
             if (!isSuccessful) {
                 Log.e(TAG, "Full word insertion failed. Not stored in database.")
+            } else {
+                Log.i(TAG, "Word successfully stored.")
             }
         }
     }

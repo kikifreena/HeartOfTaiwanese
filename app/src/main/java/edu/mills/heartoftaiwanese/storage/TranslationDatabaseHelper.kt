@@ -22,7 +22,7 @@ class TranslationDatabaseHelper(context: Context) :
         db.execSQL(
             "CREATE TABLE $tTranslations (" +
                     "$tId INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "$tKeyAccessTime INTEGER" +
+                    "$tKeyAccessTime INTEGER, " +
                     "$tKeyChinese TEXT, " +
                     "$tKeyEnglish TEXT, " +
                     "$tKeyTaiwanese TEXT, " +
@@ -94,7 +94,7 @@ class TranslationDatabaseHelper(context: Context) :
     fun getWordByTaiwanese(taiwanese: String): DatabaseWord? {
         return readableDatabase.use { db ->
             db.query(
-                tTranslations, allColumns, "$tKeyTaiwanese = ?",
+                tTranslations, allColumns, "$tKeyChinese = ?",
                 arrayOf(taiwanese), null, null, null, 1.toString()
             ).use { convertToDatabaseWord(it).firstOrNull() }
         }
@@ -117,8 +117,8 @@ class TranslationDatabaseHelper(context: Context) :
 
     fun getWordByChinese(chinese: String): DatabaseWord? {
         return readableDatabase.query(
-            tTranslations, allColumns, "$tKeyChinese = ?",
-            arrayOf(chinese), null, null, null, 1.toString()
+            tTranslations, allColumns, "$tKeyEnglish = ?",
+            arrayOf("\"$chinese\""), null, null, null, 1.toString()
         ).use {
             val wordList = convertToDatabaseWord(it).firstOrNull()
             readableDatabase.close()
