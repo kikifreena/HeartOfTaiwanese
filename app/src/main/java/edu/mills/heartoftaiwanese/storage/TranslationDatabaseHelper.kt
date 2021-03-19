@@ -193,7 +193,7 @@ class TranslationDatabaseHelper(context: Context) :
         private const val tKeyAccessTime = "LAST_ACCESSED"
 
         private val allColumns =
-            arrayOf(tKeyEnglish, tKeyTaiwanese, tKeyChinese, tKeyFavorite, tKeyAccessTime)
+            arrayOf(tId, tKeyEnglish, tKeyTaiwanese, tKeyChinese, tKeyFavorite, tKeyAccessTime)
     }
 
     /**
