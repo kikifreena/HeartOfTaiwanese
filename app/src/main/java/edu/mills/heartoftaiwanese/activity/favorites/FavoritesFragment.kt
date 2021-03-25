@@ -10,7 +10,9 @@ import edu.mills.heartoftaiwanese.activity.adapter.WordListAdapter
 import edu.mills.heartoftaiwanese.data.DatabaseWord
 import edu.mills.heartoftaiwanese.databinding.FragmentFavoritesBinding
 
-class FavoritesFragment : BaseFragment(), FavoritesContract.FavoritesView,
+class FavoritesFragment :
+    BaseFragment(),
+    FavoritesContract.FavoritesView,
     WordListAdapter.FavoriteButtonListener {
     private lateinit var binding: FragmentFavoritesBinding
     private lateinit var viewModel: FavoritesViewModel

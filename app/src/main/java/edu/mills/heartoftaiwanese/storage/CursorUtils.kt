@@ -17,3 +17,7 @@ fun Cursor.getString(tableKey: String): String {
 fun Cursor.getInt(tableKey: String): Int {
     return getInt(getColumnIndexOrThrow(tableKey))
 }
+
+fun Boolean.toInt(): Int {
+    return if (this) 1 else 0
+}

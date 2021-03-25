@@ -84,6 +84,16 @@ class TranslationRepository(private val context: Context) {
         }
     }
 
+    /**
+     * @param translationId ID from {DatabaseWord.id]
+     * @param newFavoriteStatus true if it should be favorite, false if it's no longer favorite
+     */
+    suspend fun favorite(translationId: Int, newFavoriteStatus: Boolean) {
+        return withContext(Dispatchers.IO) {
+            translationDatabaseHelper.favoriteWord(translationId, newFavoriteStatus)
+        }
+    }
+
     @Throws(IOException::class)
     private suspend fun translateTextToChinese(text: String): ChineseResult {
         Log.d(TAG, "translate text to chinese")

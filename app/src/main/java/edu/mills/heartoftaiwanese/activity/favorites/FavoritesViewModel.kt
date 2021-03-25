@@ -10,7 +10,10 @@ import kotlinx.coroutines.launch
 class FavoritesViewModel : BaseViewModel(), FavoritesContract.FavoritesViewModel {
     private lateinit var view: FavoritesFragment
     override fun favoriteWord(word: DatabaseWord) {
-        TODO("Not yet implemented")
+        GlobalScope.launch {
+            repository.favorite(word.id, !word.favorite)
+            word.favorite = !word.favorite
+        }
     }
 
     /**

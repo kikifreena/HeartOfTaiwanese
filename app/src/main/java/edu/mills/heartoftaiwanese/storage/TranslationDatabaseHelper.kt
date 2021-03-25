@@ -120,7 +120,7 @@ class TranslationDatabaseHelper(context: Context) :
     fun getWordByChinese(chinese: String): DatabaseWord? {
         return readableDatabase.query(
             tTranslations, allColumns, "$tKeyChinese = ?",
-            arrayOf("$chinese"), null, null, null, 1.toString()
+            arrayOf(chinese), null, null, null, 1.toString()
         ).use {
             val wordList = convertToDatabaseWord(it).firstOrNull()
             readableDatabase.close()
@@ -146,10 +146,25 @@ class TranslationDatabaseHelper(context: Context) :
      * @return true if the operation was successful and exactly one row was updated.
      */
     fun updateLastAccessTime(wordId: Int): Boolean {
-        return readableDatabase.use { db ->
+        return writableDatabase.use { db ->
             db.update(
                 tTranslations, contentValuesOf(tKeyAccessTime to currentTime),
                 "$tId = ?", arrayOf(wordId.toString())
+            ) == 1
+        }
+    }
+
+    /**
+     * @param translationId ID from {DatabaseWord.id]
+     * @param newFavoriteStatus true if it should be favorite, false if it's no longer favorite
+     *
+     * @return true if the operation was successful and exactly one row was updated.
+     */
+    fun favoriteWord(translationId: Int, newFavoriteStatus: Boolean): Boolean {
+        return writableDatabase.use { db ->
+            db.update(
+                tTranslations, contentValuesOf(tKeyFavorite to newFavoriteStatus.toInt()),
+                "$tId = ?", arrayOf(translationId.toString())
             ) == 1
         }
     }
@@ -233,6 +248,6 @@ class TranslationDatabaseHelper(context: Context) :
      * @param newVersion The new database version.
      */
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        TODO("Not yet implemented")
+        // Nothing, this is the first version.
     }
 }
