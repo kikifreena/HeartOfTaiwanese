@@ -43,7 +43,7 @@ class WordListAdapter :
                 } else {
                     // Unfavorite; clear the favorite button.
                     binding.favoriteSelector.imageTintList = ColorStateList.valueOf(
-                        binding.root.resources.getColor(R.color.colorPrimary, null)
+                        binding.root.resources.getColor(R.color.buttonUnselectedGray, null)
                     )
                 }
             }

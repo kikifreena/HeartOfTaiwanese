@@ -8,7 +8,14 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class FavoritesViewModel : BaseViewModel(), FavoritesContract.FavoritesViewModel {
-    private lateinit var view: FavoritesFragment
+    private lateinit var view: FavoritesContract.FavoritesView
+
+    override fun configure(view: BaseFragment, context: Context) {
+        super.configure(view, context)
+        this.view = view as FavoritesFragment
+        this.view.onConfigurationSuccess()
+    }
+
     override fun favoriteWord(word: DatabaseWord) {
         GlobalScope.launch {
             repository.favorite(word.id, !word.favorite)
@@ -27,10 +34,5 @@ class FavoritesViewModel : BaseViewModel(), FavoritesContract.FavoritesViewModel
             view.onWordListChanged(favoritesList)
         }
         return returnValue
-    }
-
-    override fun configure(view: BaseFragment, context: Context) {
-        this.view = view as FavoritesFragment
-        super.configure(view, context)
     }
 }

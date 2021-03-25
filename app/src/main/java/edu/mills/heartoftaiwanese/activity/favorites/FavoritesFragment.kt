@@ -17,7 +17,11 @@ class FavoritesFragment :
     private lateinit var binding: FragmentFavoritesBinding
     private lateinit var viewModel: FavoritesViewModel
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: WordListAdapter
+    private val adapter: WordListAdapter by lazy {
+        WordListAdapter().apply {
+            favoriteButtonListener = this@FavoritesFragment
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,21 +29,28 @@ class FavoritesFragment :
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentFavoritesBinding.inflate(layoutInflater, container, false)
+        recyclerView = binding.recyclerViewFavorites
         viewModel = FavoritesViewModel()
         viewModel.configure(this, requireContext())
         return binding.root
     }
 
     override fun onConfigurationSuccess() {
-        adapter = WordListAdapter().apply {
-            favoriteButtonListener = this@FavoritesFragment
-        }
         recyclerView.adapter = adapter
         viewModel.getUpdatedWordList()
     }
 
     override fun onWordListChanged(newWordList: List<DatabaseWord>) {
-        adapter.submitList(newWordList)
+        activity?.runOnUiThread {
+            if (newWordList.isEmpty()) {
+                binding.favoritesZero.visibility = View.VISIBLE
+                binding.recyclerViewFavorites.visibility = View.GONE
+            } else {
+                binding.favoritesZero.visibility = View.GONE
+                binding.recyclerViewFavorites.visibility = View.VISIBLE
+                adapter.submitList(newWordList)
+            }
+        }
     }
 
     /**
@@ -50,6 +61,6 @@ class FavoritesFragment :
      */
     override fun onFavoriteClicked(word: DatabaseWord): Boolean {
         viewModel.favoriteWord(word)
-        return word.favorite
+        return !word.favorite
     }
 }

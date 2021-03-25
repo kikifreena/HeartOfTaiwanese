@@ -6,4 +6,5 @@
     <color name="colorBackground">#FFFFFF</color>
     <color name="textColor">#000000</color>
     <color name="textColorLight">#FFFFFF</color>
+    <color name="buttonUnselectedGray">#888888</color>
 </resources>

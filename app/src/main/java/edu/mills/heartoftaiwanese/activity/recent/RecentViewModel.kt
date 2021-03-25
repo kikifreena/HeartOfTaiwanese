@@ -20,7 +20,10 @@ class RecentViewModel : RecentContract.RecentViewModel, BaseViewModel() {
      * Favorite a word, or unfavorite it if it's already favorited
      */
     override fun favoriteWord(word: DatabaseWord) {
-        TODO()
+        GlobalScope.launch {
+            repository.favorite(word.id, !word.favorite)
+            word.favorite = !word.favorite
+        }
     }
 
     override fun getUpdatedWordList(): Boolean {
