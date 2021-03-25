@@ -31,38 +31,22 @@ class MainActivity :
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.navigation_Home -> {
-                return launchHome()
+                return launchFragment(HomeFragment())
             }
             R.id.navigation_favorites -> {
-                return launchFavorites()
+                return launchFragment(FavoritesFragment())
             }
             R.id.navigation_recents -> {
-                return launchRecent()
+                return launchFragment(RecentFragment())
             }
         }
         return false
     }
 
-    private fun launchHome(): Boolean {
+    private fun launchFragment(fragment: BaseFragment): Boolean {
         supportFragmentManager.beginTransaction().replace(
             R.id.fragment_container,
-            HomeFragment()
-        ).commit()
-        return true
-    }
-
-    private fun launchFavorites(): Boolean {
-        supportFragmentManager.beginTransaction().replace(
-            R.id.fragment_container,
-            FavoritesFragment()
-        ).commit()
-        return true
-    }
-
-    private fun launchRecent(): Boolean {
-        supportFragmentManager.beginTransaction().replace(
-            R.id.fragment_container,
-            RecentFragment()
+            fragment
         ).commit()
         return true
     }

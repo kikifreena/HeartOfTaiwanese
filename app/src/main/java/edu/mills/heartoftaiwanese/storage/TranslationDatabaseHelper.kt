@@ -96,7 +96,7 @@ class TranslationDatabaseHelper(context: Context) :
     fun getWordByTaiwanese(taiwanese: String): DatabaseWord? {
         return readableDatabase.use { db ->
             db.query(
-                tTranslations, allColumns, "$tKeyChinese = ?",
+                tTranslations, allColumns, "$tKeyTaiwanese = ?",
                 arrayOf(taiwanese), null, null, null, 1.toString()
             ).use { convertToDatabaseWord(it).firstOrNull() }
         }
@@ -119,8 +119,8 @@ class TranslationDatabaseHelper(context: Context) :
 
     fun getWordByChinese(chinese: String): DatabaseWord? {
         return readableDatabase.query(
-            tTranslations, allColumns, "$tKeyEnglish = ?",
-            arrayOf("\"$chinese\""), null, null, null, 1.toString()
+            tTranslations, allColumns, "$tKeyChinese = ?",
+            arrayOf("$chinese"), null, null, null, 1.toString()
         ).use {
             val wordList = convertToDatabaseWord(it).firstOrNull()
             readableDatabase.close()
@@ -156,6 +156,20 @@ class TranslationDatabaseHelper(context: Context) :
 
     private fun convertToDatabaseWord(cursor: Cursor): List<DatabaseWord> {
         return mutableListOf<DatabaseWord>().apply {
+            if (cursor.moveToFirst()) {
+                add(
+                    DatabaseWord(
+                        Word(
+                            english = cursor.getString(tKeyEnglish),
+                            chinese = cursor.getString(tKeyChinese),
+                            taiwanese = cursor.getString(tKeyTaiwanese)
+                        ),
+                        id = cursor.getInt(tId),
+                        favorite = cursor.getInt(tKeyFavorite) == 1,
+                        accessTime = Date(cursor.getInt(tKeyAccessTime).toLong())
+                    )
+                )
+            }
             while (cursor.moveToNext()) {
                 add(
                     DatabaseWord(

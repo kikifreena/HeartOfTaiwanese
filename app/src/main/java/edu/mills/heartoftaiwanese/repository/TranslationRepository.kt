@@ -20,7 +20,6 @@ import java.io.IOException
 class TranslationRepository(private val context: Context) {
     companion object {
         private const val TAG = "TranslationRepository"
-        private const val URL_TO_CRAWL_TW = "http://210.240.194.97/q/THq.asp?w="
     }
 
     private val cachedTranslationsToChinese = mutableMapOf<String, ChineseResult>()
@@ -168,12 +167,15 @@ class TranslationRepository(private val context: Context) {
             if (!word.isAllNull()) { // you can't insert a blank word lol
                 when {
                     word.taiwanese != null -> {
+                        Log.d(TAG, "Checking Taiwanese")
                         translationDatabaseHelper.getWordByTaiwanese(word.taiwanese)
                     }
                     word.chinese != null -> {
+                        Log.d(TAG, "Checking chinese")
                         translationDatabaseHelper.getWordByChinese(word.chinese)
                     }
                     word.english != null -> {
+                        Log.d(TAG, "Checking english")
                         translationDatabaseHelper.getWordByEnglish(word.english)
                     }
                     else -> {
