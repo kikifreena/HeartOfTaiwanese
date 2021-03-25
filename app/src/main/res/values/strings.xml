@@ -7,12 +7,12 @@
     <string name="error">Unknown Error</string>
     <string name="too_many_requests">Error: Too many requests. Please try again later, or use Chinese-only functionality.</string>
     <string name="errorNotFound">Error: No result was found.</string>
-    <string name="sampleEnglishText">hippo</string>
+    <string name="sampleEnglishText" translatable="false">hippo</string>
     <string name="clear">clear</string>
     <string name="search_eng">Search with English</string>
     <string name="menu_favorites">Favorites</string>
     <string name="menu_recent">Recent</string>
-    <string name="menu_home">Home</string>
+    <string name="menu_home">Translation</string>
     <string name="translationFragmentExplanation">One, two, three. English, Chinese, Taiwanese. Some things just flow effortlessly. So… Good %1$s. What would you like to translate today?</string>
     <string name="translationsTitle">Translations</string>
     <string name="recentFragmentTitle">Recently viewed</string>

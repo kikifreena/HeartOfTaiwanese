@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="english">英文</string>
+    <string name="chinese">中文</string>
+    <string name="search_ch">用中文尋找</string>
+    <string name="taiwanese_result">台語</string>
+    <string name="error">錯誤</string>
+    <string name="too_many_requests">錯誤：有太多人登入，請等一會兒再試，或用中文翻譯。</string>
+    <string name="errorNotFound">沒有這個翻譯</string>
+    <string name="sampleEnglishText">hippo</string>
+    <string name="clear">清楚</string>
+    <string name="search_eng">用英文尋找</string>
+    <string name="menu_favorites">我喜歡的</string>
+    <string name="menu_recent">最新的</string>
+    <string name="menu_home">翻譯</string>
+    <string name="translationsTitle">翻譯</string>
+    <string name="favoritesNoneMessage">沒有喜歡的可顯示</string>
+    <string name="recentlyViewedNone">沒有最新的可顯示</string>
+    <string name="favoritesFragmentTitle">喜歡的</string>
+    <string name="recentFragmentTitle">最新瀏覽過的</string>
+    <string name="translationFragmentExplanation">你好，今天要翻譯什麼？</string>
+    <string name="app_name" translatable="false">台語翻譯 台灣的心</string>
+</resources>
