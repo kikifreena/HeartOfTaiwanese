@@ -1,5 +1,6 @@
 package edu.mills.heartoftaiwanese.network
 
+import android.util.Log
 import edu.mills.heartoftaiwanese.data.TaiwaneseResult
 import java.net.HttpURLConnection
 import java.net.URL
@@ -21,12 +22,18 @@ class TaiwaneseApi {
         connection.requestMethod = "POST"
         connection.setRequestProperty("Accept-Charset", "UTF-8")
         return if (connection.responseCode == HttpURLConnection.HTTP_OK) {
-            TaiwaneseResult(
-                WebResultCode.RESULT_OK,
-                connection.inputStream.bufferedReader()
-                    // Parse the text after reading it
-                    .use { parse(it.readText()) }
-            )
+            try {
+                TaiwaneseResult(
+                    WebResultCode.RESULT_OK,
+                    connection.inputStream.bufferedReader()
+                        // Parse the text after reading it
+                        .use { parse(it.readText()) }
+                )
+            } catch (ex: IndexOutOfBoundsException) {
+                Log.e("TaiwaneseApi", ex.toString())
+                TaiwaneseResult(WebResultCode.INVALID_NOT_FOUND)
+            }
+
         } else {
             TaiwaneseResult(WebResultCode.INVALID_NOT_FOUND)
         }

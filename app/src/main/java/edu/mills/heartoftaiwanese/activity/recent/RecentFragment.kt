@@ -17,7 +17,11 @@ class RecentFragment :
     private lateinit var binding: FragmentRecentBinding
     private lateinit var viewModel: RecentViewModel
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: WordListAdapter
+    private val adapter: WordListAdapter by lazy {
+        WordListAdapter().apply {
+            favoriteButtonListener = this@RecentFragment
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,9 +36,6 @@ class RecentFragment :
     }
 
     override fun onConfigurationSuccess() {
-        adapter = WordListAdapter().apply {
-            favoriteButtonListener = this@RecentFragment
-        }
         recyclerView.adapter = adapter
         viewModel.getUpdatedWordList()
     }

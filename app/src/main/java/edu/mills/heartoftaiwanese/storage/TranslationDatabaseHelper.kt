@@ -23,7 +23,7 @@ class TranslationDatabaseHelper(context: Context) :
         db.execSQL(
             "CREATE TABLE $tTranslations (" +
                     "$tId INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "$tKeyAccessTime INTEGER, " +
+                    "$tKeyAccessTime TEXT, " +
                     "$tKeyChinese TEXT, " +
                     "$tKeyEnglish TEXT, " +
                     "$tKeyTaiwanese TEXT, " +
@@ -181,7 +181,7 @@ class TranslationDatabaseHelper(context: Context) :
                         ),
                         id = cursor.getInt(tId),
                         favorite = cursor.getInt(tKeyFavorite) == 1,
-                        accessTime = Date(cursor.getInt(tKeyAccessTime).toLong())
+                        accessTime = Date(cursor.getString(tKeyAccessTime).toLong())
                     )
                 )
             }
@@ -195,7 +195,7 @@ class TranslationDatabaseHelper(context: Context) :
                         ),
                         id = cursor.getInt(tId),
                         favorite = cursor.getInt(tKeyFavorite) == 1,
-                        accessTime = Date(cursor.getInt(tKeyAccessTime).toLong())
+                        accessTime = Date(cursor.getString(tKeyAccessTime).toLong())
                     )
                 )
             }

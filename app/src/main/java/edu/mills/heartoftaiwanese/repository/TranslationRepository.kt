@@ -36,15 +36,24 @@ class TranslationRepository(private val context: Context) {
             }
             // The cache didn't work, get from database
             else {
-                getWordFromDatabase(Word(chinese = chinese))?.toTaiwaneseResult()
-                    ?.let { databaseResult ->
+                getWordFromDatabase(Word(chinese = chinese))?.let {
+                    if (it.word.chinese != null && it.word.english != null && !cachedTranslationsToChinese.containsKey(
+                            it.word.english
+                        )
+                    ) {
+                        // We got some meaty data! Store in cache.
+                        cachedTranslationsToChinese[it.word.english] =
+                            ChineseResult(WebResultCode.RESULT_OK, it.word.chinese)
+                    }
+                    it.toTaiwaneseResult().let { databaseResult ->
                         if (databaseResult.resultCode == WebResultCode.RESULT_OK) {
                             databaseResult
                         } else {
                             getTaiwaneseFromNetwork(chinese)
                         }
                         // The database didn't work, get from network
-                    } ?: getTaiwaneseFromNetwork(chinese)
+                    }
+                } ?: getTaiwaneseFromNetwork(chinese)
             }
         }
     }
@@ -58,14 +67,23 @@ class TranslationRepository(private val context: Context) {
             }
             // cache did not work, use database or network
             else {
-                getWordFromDatabase(Word(english = english))?.toChineseResult()
-                    ?.let { databaseResult ->
+                getWordFromDatabase(Word(english = english))?.let {
+                    if (it.word.taiwanese != null && it.word.chinese != null && !cachedTranslationsToTaiwanese.containsKey(
+                            it.word.chinese
+                        )
+                    ) {
+                        // We got some meaty data! Store in cache.
+                        cachedTranslationsToTaiwanese[it.word.chinese] =
+                            TaiwaneseResult(WebResultCode.RESULT_OK, it.word.taiwanese)
+                    }
+                    it.toChineseResult().let { databaseResult ->
                         if (databaseResult.resultCode == WebResultCode.RESULT_OK) {
                             databaseResult
                         } else {
                             translateTextToChinese(english)
                         }
-                    } ?: translateTextToChinese(english)
+                    }
+                } ?: translateTextToChinese(english)
             }
         }
     }
