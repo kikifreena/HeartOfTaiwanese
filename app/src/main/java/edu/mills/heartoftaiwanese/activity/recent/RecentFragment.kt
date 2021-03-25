@@ -51,6 +51,8 @@ class RecentFragment :
     }
 
     override fun onWordListChanged(newWordList: List<DatabaseWord>) {
-        adapter.submitList(newWordList)
+        activity?.runOnUiThread {
+            adapter.submitList(newWordList)
+        }
     }
 }
