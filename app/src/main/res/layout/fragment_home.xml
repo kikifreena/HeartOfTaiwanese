@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -32,18 +31,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="16dp">
-            <!--This title takes up a lot of space, maybe remove? -->
-            <!--            <TextView-->
-            <!--                android:id="@+id/tvTranslateTitle"-->
-            <!--                style="@style/Title"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginTop="@dimen/element_vertical_margin"-->
-            <!--                android:layout_marginBottom="@dimen/element_vertical_margin"-->
-            <!--                android:text="@string/translationsTitle"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toTopOf="parent" />-->
 
             <TextView
                 android:id="@+id/tvTranslateExplanation"
@@ -51,11 +38,33 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/element_vertical_margin"
                 android:layout_marginBottom="@dimen/element_vertical_margin"
-                android:textAlignment="center"
                 android:text="@string/translationFragmentExplanation"
+                android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabsEnglishChinese"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/element_vertical_margin"
+                app:layout_constraintBottom_toTopOf="@id/editTextCh"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTranslateExplanation">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/english" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chinese" />
+
+            </com.google.android.material.tabs.TabLayout>
 
             <EditText
                 android:id="@+id/editTextCh"
@@ -70,7 +79,7 @@
                 android:text="河馬"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvTranslateExplanation" />
+                app:layout_constraintTop_toBottomOf="@id/tabsEnglishChinese" />
 
             <Button
                 android:id="@+id/submit_ch"

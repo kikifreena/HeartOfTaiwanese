@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.android.material.tabs.TabLayout
 import edu.mills.heartoftaiwanese.R
 import edu.mills.heartoftaiwanese.activity.BaseFragment
 import edu.mills.heartoftaiwanese.activity.hideKeyboard
@@ -19,7 +20,7 @@ import java.util.Calendar
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : HomeContract.HomeView, BaseFragment() {
+class HomeFragment : HomeContract.HomeView, BaseFragment(), TabLayout.OnTabSelectedListener {
     companion object {
         private const val kSavedChineseText = "SavedChineseText"
         private const val kSavedEnglishText = "SavedEnglishText"
@@ -37,6 +38,7 @@ class HomeFragment : HomeContract.HomeView, BaseFragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
+    private var currentTab: Int? = 0
 
     override fun onSaveInstanceState(state: Bundle) {
         super.onSaveInstanceState(state)
@@ -62,6 +64,9 @@ class HomeFragment : HomeContract.HomeView, BaseFragment() {
         viewModel = HomeViewModel()
         viewModel.configure(this, requireActivity().applicationContext)
         initializeClickListeners()
+
+        binding.editTextCh.visibility = View.GONE
+        binding.submitCh.visibility = View.GONE
         return binding.root
     }
 
@@ -89,11 +94,16 @@ class HomeFragment : HomeContract.HomeView, BaseFragment() {
             )
         }
         binding.clearButton.setOnClickListener {
-            binding.editTextCh.setText("")
-            binding.editTextEng.setText("")
+            if (currentTab == 0) {
+                binding.editTextEng.setText("")
+            }
+            if (currentTab == 1) {
+                binding.editTextCh.setText("")
+            }
             binding.twResult.visibility = View.GONE
             binding.result.visibility = View.GONE
         }
+        binding.tabsEnglishChinese.addOnTabSelectedListener(this)
     }
 
     private fun hideForSubmit() {
@@ -101,7 +111,7 @@ class HomeFragment : HomeContract.HomeView, BaseFragment() {
         binding.result.visibility = View.GONE
         binding.progressBarLoading.visibility = View.VISIBLE
         binding.submitCh.visibility = View.GONE
-        binding.submitEn.visibility = View.INVISIBLE
+        binding.submitEn.visibility = View.GONE
         binding.clearButton.visibility = View.INVISIBLE
         hideKeyboard()
     }
@@ -110,10 +120,14 @@ class HomeFragment : HomeContract.HomeView, BaseFragment() {
         binding.progressBarLoading.visibility = View.GONE
         binding.twResult.visibility = View.VISIBLE
         binding.result.visibility = View.VISIBLE
-        binding.submitCh.visibility = View.VISIBLE
-        binding.editTextCh.visibility = View.VISIBLE
-        binding.submitEn.visibility = View.VISIBLE
-        binding.editTextEng.visibility = View.VISIBLE
+        if (currentTab == 1) {
+            binding.submitCh.visibility = View.VISIBLE
+            binding.editTextCh.visibility = View.VISIBLE
+        }
+        if (currentTab == 0) {
+            binding.submitEn.visibility = View.VISIBLE
+            binding.editTextEng.visibility = View.VISIBLE
+        }
         binding.clearButton.visibility = View.VISIBLE
     }
 
@@ -152,5 +166,48 @@ class HomeFragment : HomeContract.HomeView, BaseFragment() {
                 WebResultCode.RESULT_OK -> throw IllegalStateException("Do not call error when there's no error")
             }
         }
+    }
+
+    /**
+     * Called when a tab enters the selected state.
+     *
+     * @param tab The tab that was selected
+     */
+    override fun onTabSelected(tab: TabLayout.Tab?) {
+        currentTab = tab?.position
+        if (currentTab == 1) {
+            binding.editTextEng.visibility = View.GONE
+            binding.submitEn.visibility = View.GONE
+        }
+        if (currentTab == 0) {
+            binding.editTextCh.visibility = View.GONE
+            binding.submitCh.visibility = View.GONE
+        }
+    }
+
+    /**
+     * Called when a tab exits the selected state.
+     *
+     * @param tab The tab that was unselected
+     */
+    override fun onTabUnselected(tab: TabLayout.Tab?) {
+        if (currentTab == 1) {
+            binding.editTextEng.visibility = View.VISIBLE
+            binding.submitEn.visibility = View.VISIBLE
+        }
+        if (currentTab == 0) {
+            binding.editTextCh.visibility = View.VISIBLE
+            binding.submitCh.visibility = View.VISIBLE
+        }
+    }
+
+    /**
+     * Called when a tab that is already selected is chosen again by the user. Some applications may
+     * use this action to return to the top level of a category.
+     *
+     * @param tab The tab that was reselected.
+     */
+    override fun onTabReselected(tab: TabLayout.Tab?) {
+        // Nothing
     }
 }

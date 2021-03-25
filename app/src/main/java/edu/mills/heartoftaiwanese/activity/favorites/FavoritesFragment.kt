@@ -10,8 +10,7 @@ import edu.mills.heartoftaiwanese.activity.adapter.WordListAdapter
 import edu.mills.heartoftaiwanese.data.DatabaseWord
 import edu.mills.heartoftaiwanese.databinding.FragmentFavoritesBinding
 
-class FavoritesFragment :
-    BaseFragment(),
+class FavoritesFragment : BaseFragment(),
     FavoritesContract.FavoritesView,
     WordListAdapter.FavoriteButtonListener {
     private lateinit var binding: FragmentFavoritesBinding
@@ -61,6 +60,10 @@ class FavoritesFragment :
      */
     override fun onFavoriteClicked(word: DatabaseWord): Boolean {
         viewModel.favoriteWord(word)
+        if (!word.favorite) {
+            // For favorite you have to remove the one that's not favorited
+            viewModel.getUpdatedWordList()
+        }
         return !word.favorite
     }
 }
