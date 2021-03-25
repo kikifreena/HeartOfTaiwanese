@@ -1,9 +1,7 @@
 package edu.mills.heartoftaiwanese.activity
 
-import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import edu.mills.heartoftaiwanese.R
@@ -33,20 +31,19 @@ class MainActivity :
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.navigation_Home -> {
-                return launchHome(this)
+                return launchHome()
             }
             R.id.navigation_favorites -> {
-                return launchFavorites(this)
+                return launchFavorites()
             }
             R.id.navigation_recents -> {
-                return launchRecent(this)
+                return launchRecent()
             }
         }
         return false
     }
 
-    private fun launchHome(context: Context): Boolean {
-        Toast.makeText(context, "HOME", Toast.LENGTH_SHORT).show()
+    private fun launchHome(): Boolean {
         supportFragmentManager.beginTransaction().replace(
             R.id.fragment_container,
             HomeFragment()
@@ -54,7 +51,7 @@ class MainActivity :
         return true
     }
 
-    private fun launchFavorites(context: Context): Boolean {
+    private fun launchFavorites(): Boolean {
         supportFragmentManager.beginTransaction().replace(
             R.id.fragment_container,
             FavoritesFragment()
@@ -62,7 +59,7 @@ class MainActivity :
         return true
     }
 
-    private fun launchRecent(context: Context): Boolean {
+    private fun launchRecent(): Boolean {
         supportFragmentManager.beginTransaction().replace(
             R.id.fragment_container,
             RecentFragment()
