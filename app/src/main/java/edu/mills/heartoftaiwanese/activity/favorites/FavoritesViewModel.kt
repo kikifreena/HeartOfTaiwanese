@@ -19,7 +19,7 @@ class FavoritesViewModel : BaseViewModel(), FavoritesContract.FavoritesViewModel
     override fun favoriteWord(word: DatabaseWord) {
         GlobalScope.launch {
             repository.favorite(word.id, !word.favorite)
-            word.favorite = !word.favorite
+            getUpdatedWordList()
         }
     }
 

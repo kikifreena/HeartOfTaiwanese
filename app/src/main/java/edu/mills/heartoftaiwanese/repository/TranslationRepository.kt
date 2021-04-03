@@ -108,7 +108,10 @@ class TranslationRepository(private val context: Context) {
      */
     suspend fun favorite(translationId: Int, newFavoriteStatus: Boolean) {
         return withContext(Dispatchers.IO) {
-            translationDatabaseHelper.favoriteWord(translationId, newFavoriteStatus)
+            val result = translationDatabaseHelper.favoriteWord(translationId, newFavoriteStatus)
+            if (result) {
+                Log.d(TAG,"Favorite in database successful. New favorite status is $newFavoriteStatus")
+            }
         }
     }
 

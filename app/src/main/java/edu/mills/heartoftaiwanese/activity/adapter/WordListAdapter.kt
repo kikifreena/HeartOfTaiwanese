@@ -55,6 +55,7 @@ class WordListAdapter :
             binding.favoriteSelector.setOnClickListener {
                 favoriteButtonListener?.let {
                     isFavorite = it.onFavoriteClicked(databaseWord)
+                    notifyDataSetChanged()
                 }
             }
         }
