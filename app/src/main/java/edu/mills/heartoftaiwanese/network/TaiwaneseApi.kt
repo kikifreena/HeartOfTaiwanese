@@ -33,7 +33,6 @@ class TaiwaneseApi {
                 Log.e("TaiwaneseApi", ex.toString())
                 TaiwaneseResult(WebResultCode.INVALID_NOT_FOUND)
             }
-
         } else {
             TaiwaneseResult(WebResultCode.INVALID_NOT_FOUND)
         }
