@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvWordTitle"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/element_vertical_margin"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/element_vertical_margin"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@id/tvLeftText"
+        app:layout_constraintEnd_toStartOf="@id/favoriteSelector"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Header text" />
+
+    <ImageView
+        android:id="@+id/favoriteSelector"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="@dimen/element_vertical_margin"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:contentDescription="@string/menu_favorites"
+        android:focusable="true"
+        android:src="@drawable/ic_baseline_favorites_24"
+        app:layout_constraintBottom_toTopOf="@id/tvLeftText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:tint="@color/colorPrimary" />
+
+    <TextView
+        android:id="@+id/tvLeftText"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/element_vertical_margin"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@id/tvCenterText"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvWordTitle"
+        tools:text="English" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/ic_circle_separator"
+        app:layout_constraintEnd_toStartOf="@id/tvCenterText"
+        app:layout_constraintStart_toEndOf="@id/tvLeftText"
+        app:layout_constraintTop_toBottomOf="@id/tvWordTitle" />
+
+    <TextView
+        android:id="@+id/tvCenterText"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/element_vertical_margin"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@id/tvRightText"
+        app:layout_constraintStart_toEndOf="@id/tvLeftText"
+        app:layout_constraintTop_toBottomOf="@id/tvWordTitle"
+        tools:text="Chinese" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/ic_circle_separator"
+        app:layout_constraintEnd_toStartOf="@id/tvRightText"
+        app:layout_constraintStart_toEndOf="@id/tvCenterText"
+        app:layout_constraintTop_toBottomOf="@id/tvWordTitle" />
+
+    <TextView
+        android:id="@+id/tvRightText"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/element_vertical_margin"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@id/favoriteSelector"
+        app:layout_constraintStart_toEndOf="@id/tvCenterText"
+        app:layout_constraintTop_toBottomOf="@id/tvWordTitle"
+        tools:text="Tw" />
+
+    <TextView
+        android:id="@+id/tvLastAccessed"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/element_vertical_margin"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="@dimen/element_vertical_margin"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvLeftText"
+        tools:text="March 01, 2021" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginTop="@dimen/element_vertical_margin"
+        android:background="@color/dividerGray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvLastAccessed" />
+</androidx.constraintlayout.widget.ConstraintLayout>

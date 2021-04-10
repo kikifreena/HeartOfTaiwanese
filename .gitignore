@@ -1,0 +1,13 @@
+*.iml
+.gradle
+/local.properties
+/.idea/*
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+*~
+/app/src/main/assets/langs/*
+/app/build/outputs/apk/debug/*
+/app/src/main/java/edu/mills/heartoftaiwanese/network/API_KEY.kt
