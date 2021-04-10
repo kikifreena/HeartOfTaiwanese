@@ -40,9 +40,8 @@ class TranslateApiBuilder {
                 sourceLanguage = LanguageChoice.EN,
                 destLanguage = LanguageChoice.ZH_TW
             )
-            Log.d(TAG, "${response.first()}")
             val result: String = extractResultFromResponseList(response.first().toString())
-            Log.d(Companion.TAG, result)
+            Log.d(TAG, result)
             result
         }
     }
@@ -54,19 +53,18 @@ class TranslateApiBuilder {
                 sourceLanguage = LanguageChoice.ZH_TW,
                 destLanguage = LanguageChoice.EN
             )
-            Log.d(TAG, "${response.first()}")
             val result: String = extractResultFromResponseList(response.first().toString())
-            Log.d(Companion.TAG, result)
+            Log.d(TAG, result)
             result
         }
     }
 
-    /**
+    /*
      * Response.first() will get you something like this: [[你好, hello, null, null, 10.0]]
      * So you need to extract it.
      */
     private fun extractResultFromResponseList(responseListString: String): String {
-        Log.d(Companion.TAG, responseListString)
+        Log.d(TAG, responseListString)
         return responseListString.trim { it == '[' || it == ']' }.trim()
             .split(",")
             .first()

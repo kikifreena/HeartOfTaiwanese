@@ -8,9 +8,10 @@ import androidx.fragment.app.Fragment
 
 /**
  * Extension functions for UI
- *
- * https://stackoverflow.com/questions/41790357/close-hide-the-android-soft-keyboard-with-kotlin#45857155
  */
+
+
+// Source: https://stackoverflow.com/questions/41790357/close-hide-the-android-soft-keyboard-with-kotlin#45857155
 fun Fragment.hideKeyboard() {
     view?.let { activity?.hideKeyboard(it) }
 }

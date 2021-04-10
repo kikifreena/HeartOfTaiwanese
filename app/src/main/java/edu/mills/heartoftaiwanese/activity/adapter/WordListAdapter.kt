@@ -19,9 +19,10 @@ class WordListAdapter :
 
     interface FavoriteButtonListener {
         /**
-         * Interface function that determines what can happen if the favorite is clicked.
-         * The view adapter takes care of hiding/showing the favorite button.
+         * Determines what can happen if the favorite is clicked.
+         * Caller does not need to implement hiding/showing the favorite button.
          *
+         * @param word the DatabaseWord that is clicked
          * @return the new value of the favorite
          */
         fun onFavoriteClicked(word: DatabaseWord): Boolean
@@ -35,17 +36,13 @@ class WordListAdapter :
         private var isFavorite: Boolean = false
             set(value) {
                 field = value
-                if (value) {
-                    // Display the favorite button as colorPrimary
-                    binding.favoriteSelector.imageTintList = ColorStateList.valueOf(
-                        binding.root.resources.getColor(R.color.colorPrimaryDark, null)
+                // Display the favorite button as colorPrimary
+                binding.favoriteSelector.imageTintList = ColorStateList.valueOf(
+                    binding.root.resources.getColor(
+                        if (value) R.color.colorPrimaryDark else R.color.buttonUnselectedGray,
+                        null
                     )
-                } else {
-                    // Unfavorite; clear the favorite button.
-                    binding.favoriteSelector.imageTintList = ColorStateList.valueOf(
-                        binding.root.resources.getColor(R.color.buttonUnselectedGray, null)
-                    )
-                }
+                )
             }
 
         fun bind(databaseWord: DatabaseWord) {

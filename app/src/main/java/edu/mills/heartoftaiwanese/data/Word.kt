@@ -5,11 +5,17 @@ data class Word(
     val chinese: String? = null,
     val taiwanese: String? = null
 ) {
+    /**
+     *
+     * @return true if there is a empty English, Chinese, or Taiwanese string; false otherwise
+     */
     fun containsNull() =
         english.isNullOrBlank() || chinese.isNullOrBlank() || taiwanese.isNullOrBlank()
 
     /**
-     * Function to check if the data object is useless
+     * Check if the data object is still useful
+     *
+     * @return true if there is a non-empty English, Chinese, or Taiwanese string; false otherwise
      */
     fun isAllNull() =
         english.isNullOrBlank() && chinese.isNullOrBlank() && taiwanese.isNullOrBlank()

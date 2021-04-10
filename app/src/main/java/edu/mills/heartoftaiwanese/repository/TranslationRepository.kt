@@ -27,8 +27,8 @@ class TranslationRepository(private val context: Context) {
     private val translationDatabaseHelper by lazy { TranslationDatabaseHelper(context) }
     private val taiwaneseApi by lazy { TaiwaneseApi() }
 
-    suspend fun getTaiwanese(chinese: String): TaiwaneseResult {
-        return withContext(Dispatchers.IO) {
+    suspend fun getTaiwanese(chinese: String): TaiwaneseResult =
+        withContext(Dispatchers.IO) {
             // Get from the cache if possible...
             val possibleTaiwaneseResult: TaiwaneseResult? = cachedTranslationsToTaiwanese[chinese]
             if (possibleTaiwaneseResult?.resultCode == WebResultCode.RESULT_OK) {
@@ -56,10 +56,9 @@ class TranslationRepository(private val context: Context) {
                 } ?: getTaiwaneseFromNetwork(chinese)
             }
         }
-    }
 
-    suspend fun getChinese(english: String): ChineseResult {
-        return withContext(Dispatchers.IO) {
+    suspend fun getChinese(english: String): ChineseResult =
+        withContext(Dispatchers.IO) {
             val possibleChineseResult = cachedTranslationsToChinese[english]
             // Get from the cache if possible...
             if (possibleChineseResult?.resultCode == WebResultCode.RESULT_OK) {
@@ -86,7 +85,6 @@ class TranslationRepository(private val context: Context) {
                 } ?: translateTextToChinese(english)
             }
         }
-    }
 
     suspend fun getFavorites(): List<DatabaseWord> {
         Log.d(TAG, "Getting Favorites")
@@ -103,6 +101,8 @@ class TranslationRepository(private val context: Context) {
     }
 
     /**
+     * Favorite or unfavorite an item in the database.
+     *
      * @param translationId ID from {DatabaseWord.id]
      * @param newFavoriteStatus true if it should be favorite, false if it's no longer favorite
      */
@@ -110,7 +110,10 @@ class TranslationRepository(private val context: Context) {
         return withContext(Dispatchers.IO) {
             val result = translationDatabaseHelper.favoriteWord(translationId, newFavoriteStatus)
             if (result) {
-                Log.d(TAG,"Favorite in database successful. New favorite status is $newFavoriteStatus")
+                Log.d(
+                    TAG,
+                    "Favorite in database successful. New favorite status is $newFavoriteStatus"
+                )
             }
         }
     }
@@ -176,17 +179,11 @@ class TranslationRepository(private val context: Context) {
                     return@withContext
                 }
             }
-            val isSuccessful = translationDatabaseHelper.insertWord(wordToInsert)
-            if (!isSuccessful) {
-                Log.e(TAG, "Full word insertion failed. Not stored in database.")
-            } else {
-                Log.i(TAG, "Word successfully stored.")
-            }
         }
     }
 
     /**
-     * Method to attempt to get a word from database.
+     * Attempt to get a word from database.
      * @param word a [Word] that has taiwanese, chinese, or english filled in.
      * It will attempt to fetch words in that priority. Leave out Taiwanese if you want to go by Chinese, etc.
      *
@@ -195,7 +192,8 @@ class TranslationRepository(private val context: Context) {
     private suspend fun getWordFromDatabase(word: Word): DatabaseWord? {
         Log.d(TAG, "Checking the database...")
         return withContext(Dispatchers.IO) {
-            if (!word.isAllNull()) { // you can't insert a blank word lol
+            if (word.isAllNull()) throw IllegalArgumentException("A blank word is being attempted. Do not call this method for a blank word.")
+            else { // you can't insert a blank word
                 when {
                     word.taiwanese != null -> {
                         Log.d(TAG, "Checking Taiwanese")
@@ -214,7 +212,7 @@ class TranslationRepository(private val context: Context) {
                         throw IllegalStateException("How can all of them be null when you checked that they're all not null???")
                     }
                 }
-            } else throw IllegalArgumentException("A blank word is being attempted. Do not call this method for a blank word.")
+            }
         }
     }
 }

@@ -16,24 +16,12 @@ import edu.mills.heartoftaiwanese.network.WebResultCode
 import java.util.Calendar
 
 /**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * A simple [Fragment] subclass. Holds the translation page.
  */
 class HomeFragment : HomeContract.HomeView, BaseFragment(), TabLayout.OnTabSelectedListener {
     companion object {
         private const val kSavedChineseText = "SavedChineseText"
         private const val kSavedEnglishText = "SavedEnglishText"
-
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @return A new instance of fragment HomeFragment.
-         */
-        @JvmStatic
-        fun newInstance() =
-            HomeFragment()
     }
 
     private lateinit var binding: FragmentHomeBinding
@@ -70,12 +58,10 @@ class HomeFragment : HomeContract.HomeView, BaseFragment(), TabLayout.OnTabSelec
         return binding.root
     }
 
-    private fun isMorningAfternoonEvening(hour: Int): String {
-        return when (hour) {
-            in 4..12 -> resources.getStringArray(R.array.timeOfDay)[0] // morning
-            in 12..17 -> resources.getStringArray(R.array.timeOfDay)[1] // afternoon
-            else -> resources.getStringArray(R.array.timeOfDay)[2] // evening
-        }
+    private fun isMorningAfternoonEvening(hour: Int) = when (hour) {
+        in 4..12 -> resources.getStringArray(R.array.timeOfDay)[0] // morning, between 4:00 and 12:00
+        in 12..17 -> resources.getStringArray(R.array.timeOfDay)[1] // afternoon, between 12:00 and 17:00
+        else -> resources.getStringArray(R.array.timeOfDay)[2] // evening
     }
 
     private fun initializeClickListeners() {
@@ -94,11 +80,9 @@ class HomeFragment : HomeContract.HomeView, BaseFragment(), TabLayout.OnTabSelec
             )
         }
         binding.clearButton.setOnClickListener {
-            if (currentTab == 0) {
-                binding.editTextEng.setText("")
-            }
-            if (currentTab == 1) {
-                binding.editTextCh.setText("")
+            when (currentTab) {
+                0 -> binding.editTextEng.setText("")
+                1 -> binding.editTextCh.setText("")
             }
             binding.twResult.visibility = View.GONE
             binding.result.visibility = View.GONE
@@ -120,13 +104,15 @@ class HomeFragment : HomeContract.HomeView, BaseFragment(), TabLayout.OnTabSelec
         binding.progressBarLoading.visibility = View.GONE
         binding.twResult.visibility = View.VISIBLE
         binding.result.visibility = View.VISIBLE
-        if (currentTab == 1) {
-            binding.submitCh.visibility = View.VISIBLE
-            binding.editTextCh.visibility = View.VISIBLE
-        }
-        if (currentTab == 0) {
-            binding.submitEn.visibility = View.VISIBLE
-            binding.editTextEng.visibility = View.VISIBLE
+        when (currentTab) {
+            0 -> {
+                binding.submitEn.visibility = View.VISIBLE
+                binding.editTextEng.visibility = View.VISIBLE
+            }
+            1 -> {
+                binding.submitCh.visibility = View.VISIBLE
+                binding.editTextCh.visibility = View.VISIBLE
+            }
         }
         binding.clearButton.visibility = View.VISIBLE
     }
@@ -146,25 +132,14 @@ class HomeFragment : HomeContract.HomeView, BaseFragment(), TabLayout.OnTabSelec
         Log.e("HomeFragment", error.toString())
         activity?.runOnUiThread {
             showAfterSubmit()
-            when (error) {
-                WebResultCode.RATE_LIMITED -> Toast.makeText(
-                    activity,
-                    getText(R.string.too_many_requests),
-                    Toast.LENGTH_LONG
-                ).show()
-                WebResultCode.INVALID_NOT_FOUND -> Toast.makeText(
-                    activity,
-                    getText(R.string.errorNotFound),
-                    Toast.LENGTH_LONG
-                ).show()
-                WebResultCode.UNKNOWN_ERROR -> Toast.makeText(
-                    activity,
-                    getText(R.string.error),
-                    Toast.LENGTH_LONG
-                ).show()
-                // Bad state
-                WebResultCode.RESULT_OK -> throw IllegalStateException("Do not call error when there's no error")
-            }
+            Toast.makeText(
+                activity, when (error) {
+                    WebResultCode.INVALID_NOT_FOUND -> getText(R.string.errorNotFound)
+                    WebResultCode.UNKNOWN_ERROR -> getText(R.string.error)
+                    WebResultCode.RATE_LIMITED -> getText(R.string.too_many_requests)
+                    WebResultCode.RESULT_OK -> throw IllegalStateException("Do not call error when there's no error")
+                }, Toast.LENGTH_LONG
+            ).show()
         }
     }
 

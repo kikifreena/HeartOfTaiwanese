@@ -6,18 +6,15 @@ import android.database.Cursor
  * Gets a string for a column name by getting the column index for that column name first.
  */
 @Throws(IllegalArgumentException::class)
-fun Cursor.getString(tableKey: String): String {
-    return getString(getColumnIndexOrThrow(tableKey))
-}
+fun Cursor.getString(tableKey: String): String  = getString(getColumnIndexOrThrow(tableKey))
 
 /**
  * Get an Int for a column name by getting the column index for the column name.
  */
 @Throws(IllegalArgumentException::class)
-fun Cursor.getInt(tableKey: String): Int {
-    return getInt(getColumnIndexOrThrow(tableKey))
-}
+fun Cursor.getInt(tableKey: String): Int = getInt(getColumnIndexOrThrow(tableKey))
 
-fun Boolean.toInt(): Int {
-    return if (this) 1 else 0
-}
+/**
+ * 1 is true, 0 is false
+ */
+fun Boolean.toInt() = if (this) 1 else 0

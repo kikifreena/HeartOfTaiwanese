@@ -14,6 +14,6 @@ interface RecentContract {
         /**
          * Get the updated word list. Return true if there are more than 0 words, false if there are none.
          */
-        fun getUpdatedWordList(): Boolean
+        fun updateWordList(): Boolean
     }
 }

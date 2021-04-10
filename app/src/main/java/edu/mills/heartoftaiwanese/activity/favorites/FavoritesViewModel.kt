@@ -19,20 +19,16 @@ class FavoritesViewModel : BaseViewModel(), FavoritesContract.FavoritesViewModel
     override fun favoriteWord(word: DatabaseWord) {
         GlobalScope.launch {
             repository.favorite(word.id, !word.favorite)
-            getUpdatedWordList()
+            updateWordList()
         }
     }
 
     /**
      * Get the updated word list. Return true if there are more than 0 words, false if there are none.
      */
-    override fun getUpdatedWordList(): Boolean {
-        var returnValue = false
-        GlobalScope.launch {
-            val favoritesList = repository.getFavorites()
-            returnValue = favoritesList.isNotEmpty()
-            view.onWordListChanged(favoritesList)
-        }
-        return returnValue
+    override fun updateWordList(): Boolean {
+        val favoritesList = super.getUpdatedListForType(ListType.FAVORITES)
+        view.onWordListChanged(favoritesList)
+        return favoritesList.isNotEmpty()
     }
 }

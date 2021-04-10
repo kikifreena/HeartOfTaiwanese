@@ -37,7 +37,7 @@ class FavoritesFragment :
 
     override fun onConfigurationSuccess() {
         recyclerView.adapter = adapter
-        viewModel.getUpdatedWordList()
+        viewModel.updateWordList()
     }
 
     override fun onWordListChanged(newWordList: List<DatabaseWord>) {
@@ -53,12 +53,6 @@ class FavoritesFragment :
         }
     }
 
-    /**
-     * Interface function that determines what can happen if the favorite is clicked.
-     * The view adapter takes care of hiding/showing the favorite button.
-     *
-     * @return the new value of the favorite
-     */
     override fun onFavoriteClicked(word: DatabaseWord): Boolean {
         viewModel.favoriteWord(word)
         return !word.favorite

@@ -23,24 +23,21 @@ class MainActivity :
         supportFragmentManager.beginTransaction().replace(
             R.id.fragment_container,
             HomeFragment()
-        )
-            .commit()
+        ).commit()
         initializeClickListeners()
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.navigation_Home -> {
-                return launchFragment(HomeFragment())
-            }
-            R.id.navigation_favorites -> {
-                return launchFragment(FavoritesFragment())
-            }
-            R.id.navigation_recents -> {
-                return launchFragment(RecentFragment())
-            }
+    override fun onNavigationItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.navigation_Home -> {
+            launchFragment(HomeFragment())
         }
-        return false
+        R.id.navigation_favorites -> {
+            launchFragment(FavoritesFragment())
+        }
+        R.id.navigation_recents -> {
+            launchFragment(RecentFragment())
+        }
+        else -> false
     }
 
     private fun launchFragment(fragment: BaseFragment): Boolean {

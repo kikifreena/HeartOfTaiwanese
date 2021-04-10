@@ -1,6 +1,7 @@
 package edu.mills.heartoftaiwanese.activity.recent
 
 import android.content.Context
+import android.provider.ContactsContract
 import edu.mills.heartoftaiwanese.activity.BaseFragment
 import edu.mills.heartoftaiwanese.activity.BaseViewModel
 import edu.mills.heartoftaiwanese.data.DatabaseWord
@@ -26,13 +27,9 @@ class RecentViewModel : RecentContract.RecentViewModel, BaseViewModel() {
         }
     }
 
-    override fun getUpdatedWordList(): Boolean {
-        var returnValue = false
-        GlobalScope.launch {
-            val recentList = repository.getRecent()
-            returnValue = recentList.isNotEmpty()
-            view.onWordListChanged(recentList)
-        }
-        return returnValue
+    override fun updateWordList(): Boolean {
+        val favoritesList = super.getUpdatedListForType(ListType.FAVORITES)
+        view.onWordListChanged(favoritesList)
+        return favoritesList.isNotEmpty()
     }
 }

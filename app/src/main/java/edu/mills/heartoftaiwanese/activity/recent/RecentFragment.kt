@@ -37,7 +37,7 @@ class RecentFragment :
 
     override fun onConfigurationSuccess() {
         recyclerView.adapter = adapter
-        viewModel.getUpdatedWordList()
+        viewModel.updateWordList()
     }
 
     override fun onWordListChanged(newWordList: List<DatabaseWord>) {

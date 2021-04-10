@@ -71,7 +71,6 @@ class TranslationDatabaseHelper(context: Context) :
                 null, null, "$tKeyAccessTime DESC", 5.toString()
             ).use {
                 val wordList = convertToDatabaseWord(it)
-                readableDatabase.close()
                 wordList
             }
         }
@@ -87,7 +86,6 @@ class TranslationDatabaseHelper(context: Context) :
                 null, null, "$tKeyAccessTime DESC"
             ).use {
                 val wordList = convertToDatabaseWord(it)
-                readableDatabase.close()
                 wordList
             }
         }
@@ -123,7 +121,6 @@ class TranslationDatabaseHelper(context: Context) :
             arrayOf(chinese), null, null, null, 1.toString()
         ).use {
             val wordList = convertToDatabaseWord(it).firstOrNull()
-            readableDatabase.close()
             wordList
         }
     }

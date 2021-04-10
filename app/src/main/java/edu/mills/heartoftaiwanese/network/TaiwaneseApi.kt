@@ -14,6 +14,9 @@ class TaiwaneseApi {
         private val digitsRegex by lazy {
             Regex("""\d+""")
         }
+        private val splitRegex by lazy {
+            "&#|;".toRegex()
+        }
     }
 
     fun getTaiwanese(chinese: String): TaiwaneseResult {
@@ -52,16 +55,17 @@ class TaiwaneseApi {
         return convertToString(data.substring(loc2, loc3))
     }
 
-    /**
+    /*
      * Do NOT modify this function unless you know what you're doing (I don't).
      *
      * The Taiwanese gets returned as some hexadecimal string-like combination that is not human readable.
      * This function turns the string back into a human-readable string.
-     *
+     */
+    /**
      * @param hex the hexadecimal string representation to be converted
      */
     private fun convertToString(hex: String): String {
-        val split = hex.split("&#|;".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val split = hex.split(splitRegex).dropLastWhile { it.isEmpty() }.toTypedArray()
         return StringBuilder().apply {
             for (curr in split) {
                 if (curr.matches(digitsRegex)) {

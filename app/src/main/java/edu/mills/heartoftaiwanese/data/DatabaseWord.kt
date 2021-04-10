@@ -15,19 +15,15 @@ data class DatabaseWord(
     var favorite: Boolean = false,
     var accessTime: Date
 ) {
-    fun toTaiwaneseResult(): TaiwaneseResult {
-        return if (word.taiwanese == null) {
-            TaiwaneseResult(WebResultCode.INVALID_NOT_FOUND)
-        } else {
-            TaiwaneseResult(WebResultCode.RESULT_OK, word.taiwanese)
-        }
+    fun toTaiwaneseResult(): TaiwaneseResult = if (word.taiwanese == null) {
+        TaiwaneseResult(WebResultCode.INVALID_NOT_FOUND)
+    } else {
+        TaiwaneseResult(WebResultCode.RESULT_OK, word.taiwanese)
     }
 
-    fun toChineseResult(): ChineseResult {
-        return if (word.taiwanese == null) {
-            ChineseResult(WebResultCode.INVALID_NOT_FOUND)
-        } else {
-            ChineseResult(WebResultCode.RESULT_OK, word.chinese)
-        }
+    fun toChineseResult(): ChineseResult = if (word.taiwanese == null) {
+        ChineseResult(WebResultCode.INVALID_NOT_FOUND)
+    } else {
+        ChineseResult(WebResultCode.RESULT_OK, word.chinese)
     }
 }
