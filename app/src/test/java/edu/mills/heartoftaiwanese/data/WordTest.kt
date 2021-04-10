@@ -15,19 +15,19 @@ class WordTest {
     @Test
     fun `detect english null`() {
         val w = Word("something", null, null)
-        assertTrue((w.containsNull()))
+        assertTrue(w.containsNull())
     }
 
     @Test
     fun `detect chinese null`() {
         val w = Word(chinese = "not null string")
-        assertTrue((w.containsNull()))
+        assertTrue(w.containsNull())
     }
 
     @Test
     fun `detect taiwanese null`() {
         val w = Word(taiwanese = "dai gu")
-        assertTrue((w.containsNull()))
+        assertTrue(w.containsNull())
     }
 
     @Test
